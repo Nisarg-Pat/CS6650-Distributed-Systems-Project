@@ -5,15 +5,28 @@ import './App.css';
 import HomeScreen from "./components/HomeScreen";
 import SignupScreen from "./components/SignupScreen";
 
+import usersReducer from "./data/users/users-reducer";
+import {configureStore} from "@reduxjs/toolkit";
+import {Provider} from "react-redux";
+
+const store = configureStore({
+    reducer:{
+        users: usersReducer
+    }
+})
+
 function App() {
   return (
     <div className="container mt-4 mb-4">
-        <BrowserRouter>
-            <Routes>
-                <Route index element={<HomeScreen/>}/>
-                <Route path={"/signup"} element={<SignupScreen/>}/>
-            </Routes>
-        </BrowserRouter>
+        <Provider store={store}>
+            <BrowserRouter>
+                <Routes>
+                    <Route index element={<HomeScreen/>}/>
+                    <Route path={"/signup"} element={<SignupScreen/>}/>
+                </Routes>
+            </BrowserRouter>
+        </Provider>
+
     </div>
   );
 }

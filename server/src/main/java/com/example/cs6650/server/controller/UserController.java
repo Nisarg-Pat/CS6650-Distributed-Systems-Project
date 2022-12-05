@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = {"http://localhost:3000"})
 @RequestMapping("/user")
 public class UserController {
 
@@ -29,13 +31,24 @@ public class UserController {
         List<User> users = userService.listUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
+//
+//    @GetMapping("/signup")
+//    public ResponseEntity<User> listUsers(@RequestBody User user) {
+//        Optional<User> getUser = userService.getUserFromUsernamePassword(user.getUsername(), user.getPassword());
+//        if(getUser.isEmpty()) {
+//            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+//        }
+//        return new ResponseEntity<>(getUser.get(), HttpStatus.OK);
+//    }
 
-    @PostMapping("/create")
-    public ResponseEntity<ApiResponse> createUser(@RequestBody User user) {
+    @PostMapping("/signup")
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        System.out.println("In Create User:"+user);
         if(userService.getUserFromUsername(user.getUsername()).isPresent()) {
-            return new ResponseEntity<>(new ApiResponse(false, "User already exists"), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
         }
         userService.createUser(user);
-        return new ResponseEntity<>(new ApiResponse(true, "User created successfully"), HttpStatus.CREATED);
+
+        return new ResponseEntity<>(userService.getUserFromUsername(user.getUsername()).get(), HttpStatus.CREATED);
     }
 }
