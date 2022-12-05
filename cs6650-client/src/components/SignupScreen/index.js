@@ -1,6 +1,7 @@
-import {useState} from "react";
+import React, {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {signupThunk} from "../../data/users/users-thunks";
+import NavBar from "../NavBar";
 
 const SignupScreen = () => {
     const [username, setUsername] = useState("");
@@ -14,12 +15,12 @@ const SignupScreen = () => {
 
     const onSignupBtnClick = () => {
         const newUser = {username, password, name, email};
-        console.log(newUser);
         dispatch(signupThunk(newUser));
     }
 
     return (
         <div className={"row"}>
+            <NavBar/>
             <div className={"ds-text-center"}>
                 <label>
                     Username:

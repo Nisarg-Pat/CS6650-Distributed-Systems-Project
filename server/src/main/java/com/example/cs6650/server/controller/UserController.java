@@ -31,15 +31,6 @@ public class UserController {
         List<User> users = userService.listUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
-//
-//    @GetMapping("/signup")
-//    public ResponseEntity<User> listUsers(@RequestBody User user) {
-//        Optional<User> getUser = userService.getUserFromUsernamePassword(user.getUsername(), user.getPassword());
-//        if(getUser.isEmpty()) {
-//            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-//        }
-//        return new ResponseEntity<>(getUser.get(), HttpStatus.OK);
-//    }
 
     @PostMapping("/signup")
     public ResponseEntity<User> createUser(@RequestBody User user) {
@@ -50,5 +41,15 @@ public class UserController {
         userService.createUser(user);
 
         return new ResponseEntity<>(userService.getUserFromUsername(user.getUsername()).get(), HttpStatus.CREATED);
+    }
+
+
+    @PostMapping("/login")
+    public ResponseEntity<User> loginUser(@RequestBody User user) {
+        Optional<User> getUser = userService.getUserFromUsernamePassword(user.getUsername(), user.getPassword());
+        if(getUser.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(getUser.get(), HttpStatus.OK);
     }
 }
