@@ -1,5 +1,5 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {addBook, getBookListOfUser, searchBook, sellBook} from "./book-service";
+import {addBook, deleteBook, getBookListOfUser, searchBook, sellBook, shelfBook} from "./book-service";
 
 export const addBookThunk = createAsyncThunk(
     'addbook',
@@ -13,7 +13,17 @@ export const bookListThunk = createAsyncThunk(
 
 export const sellBookThunk = createAsyncThunk(
     'sellBook',
-    async (user) => await sellBook(user)
+    async (book) => await sellBook(book)
+)
+
+export const shelfBookThunk = createAsyncThunk(
+    'shelfBook',
+    async (book) => await shelfBook(book)
+)
+
+export const deleteBookThunk = createAsyncThunk(
+    'deleteBook',
+    async (book) => await deleteBook(book)
 )
 
 export const searchBookThunk = createAsyncThunk(

@@ -6,10 +6,8 @@ import com.example.cs6650.server.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class BookService {
@@ -33,7 +31,23 @@ public class BookService {
         if(bookRepository.findById(oldBook.getId()).isPresent()) {
             Book book = bookRepository.findById(oldBook.getId()).get();
             book.setStatus("sell");
+            book.setSellPrice(oldBook.getSellPrice());
             bookRepository.save(book);
+        }
+    }
+
+    public void shelfBook(Book oldBook) {
+        if(bookRepository.findById(oldBook.getId()).isPresent()) {
+            Book book = bookRepository.findById(oldBook.getId()).get();
+            book.setStatus("shelf");
+            book.setSellPrice(0);
+            bookRepository.save(book);
+        }
+    }
+
+    public void deleteBook(Book book) {
+        if(bookRepository.findById(book.getId()).isPresent()) {
+            bookRepository.deleteById(book.getId());
         }
     }
 

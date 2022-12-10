@@ -51,9 +51,38 @@ public class BookController {
         return new ResponseEntity<>(bookService.getBook(book.getId()).get(), HttpStatus.OK);
     }
 
+    @PostMapping("/shelf")
+    public ResponseEntity<Book> shelfBook(@RequestBody Book book) {
+        System.out.println("In Shelf Book:"+book);
+        Optional<User> user = userService.getUserFromId(book.getUserId());
+        if(user.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+        bookService.shelfBook(book);
+        return new ResponseEntity<>(bookService.getBook(book.getId()).get(), HttpStatus.OK);
+    }
+
+    @PostMapping("/delete")
+    public ResponseEntity<Integer> deleteBook(@RequestBody Book book) {
+        System.out.println("In Delete Book:"+book);
+        Optional<User> user = userService.getUserFromId(book.getUserId());
+        if(user.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+        int id = book.getId();
+        bookService.deleteBook(book);
+        return new ResponseEntity<>(id, HttpStatus.OK);
+    }
+
     @GetMapping("/search/{name}")
     public ResponseEntity<List<Book>> searchBook(@PathVariable("name") String name) {
         List<Book> list = bookService.searchBook(name);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping("/search/")
+    public ResponseEntity<List<Book>> searchBook() {
+        List<Book> list = bookService.searchBook("");
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }

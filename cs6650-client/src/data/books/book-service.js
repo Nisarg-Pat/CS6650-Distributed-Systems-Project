@@ -17,6 +17,16 @@ export const sellBook = async (book) => {
     return response.data
 }
 
+export const shelfBook = async (book) => {
+    const response = await api.post(`${BOOK_URL}/shelf`, book)
+    return response.data
+}
+
+export const deleteBook = async (book) => {
+    const response = await api.post(`${BOOK_URL}/delete`, book)
+    return response.data
+}
+
 export const searchBook = async (search) => {
     const response = await api.get(`${BOOK_URL}/search/${search}`)
     return response.data

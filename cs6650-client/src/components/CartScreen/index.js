@@ -1,8 +1,8 @@
 import NavBar from "../NavBar";
 import React, {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import BookItem from "../CartScreen/BookItem";
 import {getCartThunk} from "../../data/carts/carts-thunk";
+import BookItem from "../BookItem";
 
 const CartScreen = () => {
     const {currentUser} = useSelector((state) => state.users);
@@ -18,7 +18,7 @@ const CartScreen = () => {
         <>
             <NavBar/>
             {
-                userCart.map((book, key) => <BookItem book={book} key={key}/>)
+                userCart.map((book, key) => <BookItem book={book} key={key} type={'cart'}/>)
             }
         </>
     );

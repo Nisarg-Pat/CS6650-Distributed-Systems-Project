@@ -13,17 +13,17 @@ public class Book {
     private String name;
     private int userId;
     private String status;
-    private double sellCost;
+    private double sellPrice;
 
     public Book() {
 
     }
 
-    public Book(@NonNull String name, @NonNull int userId, @NonNull String status, @NonNull double sellCost) {
+    public Book(@NonNull String name, @NonNull int userId, @NonNull String status, @NonNull double sellPrice) {
         this.name = name;
         this.userId = userId;
         this.status = status;
-        this.sellCost = sellCost;
+        this.sellPrice = sellPrice;
     }
 
     public Integer getId() {
@@ -57,7 +57,7 @@ public class Book {
                 ", name='" + name + '\'' +
                 ", userId=" + userId +
                 ", status='" + status + '\'' +
-                ", sellCost=" + sellCost +
+                ", sellCost=" + sellPrice +
                 '}';
     }
 
@@ -69,11 +69,11 @@ public class Book {
         this.status = status;
     }
 
-    public double getSellCost() {
-        return sellCost;
+    public double getSellPrice() {
+        return sellPrice;
     }
 
-    public void setSellCost(double sellCost) {
-        this.sellCost = sellCost;
+    public void setSellPrice(double sellPrice) {
+        this.sellPrice = sellPrice;
     }
 }
