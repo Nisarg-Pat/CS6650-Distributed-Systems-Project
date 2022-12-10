@@ -1,8 +1,9 @@
 import NavBar from "../NavBar";
-import React from "react";
+import React, {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {searchBookThunk} from "../../data/books/books-thunk";
 import BookItem from "../SearchScreen/BookItem";
+import {initSearch} from "../../data/books/books-reducer";
 
 
 const SearchScreen = () => {
@@ -11,8 +12,16 @@ const SearchScreen = () => {
 
     const dispatch = useDispatch();
 
+    useEffect(() => {
+        dispatch(initSearch())
+    }, [dispatch])
+
     const searchHandler = (search) => {
-        dispatch(searchBookThunk(search))
+        if(search === '') {
+            dispatch(initSearch());
+        } else {
+            dispatch(searchBookThunk(search))
+        }
     }
 
     return (

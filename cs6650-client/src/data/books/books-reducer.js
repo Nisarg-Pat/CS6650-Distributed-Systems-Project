@@ -9,6 +9,9 @@ const booksReducer = createSlice({
             searchList: []
         },
         reducers:{
+            initSearch(state, action) {
+                state.searchList = []
+            }
         },
         extraReducers: {
             [addBookThunk.fulfilled]: (state, action) => {
@@ -29,4 +32,5 @@ const booksReducer = createSlice({
     }
 )
 
+export const {initSearch} = booksReducer.actions;
 export default booksReducer.reducer;

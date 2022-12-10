@@ -5,16 +5,10 @@ import {useNavigate} from "react-router-dom";
 
 const BookItem = ({book}) => {
 
-    const {currentUser} = useSelector((state) => state.users)
+    // const {currentUser} = useSelector((state) => state.users)
 
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-
-    const onClickAddToCartBtn = async () => {
-        const cart = {userId: currentUser.id, bookId: book.id}
-        await dispatch(addToCartThunk(cart))
-        navigate("/cart");
-    }
+    // const dispatch = useDispatch();
+    // const navigate = useNavigate();
 
     return (
         <div>

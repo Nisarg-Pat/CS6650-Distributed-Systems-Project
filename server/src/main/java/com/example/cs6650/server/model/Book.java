@@ -11,7 +11,6 @@ public class Book {
     private Integer id;
 
     private String name;
-    private int quantity;
     private int userId;
     private String status;
     private double sellCost;
@@ -20,9 +19,8 @@ public class Book {
 
     }
 
-    public Book(@NonNull String name, @NonNull int quantity, @NonNull int userId, @NonNull String status, @NonNull double sellCost) {
+    public Book(@NonNull String name, @NonNull int userId, @NonNull String status, @NonNull double sellCost) {
         this.name = name;
-        this.quantity = quantity;
         this.userId = userId;
         this.status = status;
         this.sellCost = sellCost;
@@ -44,14 +42,6 @@ public class Book {
         this.name = name;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
     public int getUserId() {
         return userId;
     }
@@ -62,7 +52,13 @@ public class Book {
 
     @Override
     public String toString() {
-        return "Book {name="+name+", quantity="+quantity+"}";
+        return "Book{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", userId=" + userId +
+                ", status='" + status + '\'' +
+                ", sellCost=" + sellCost +
+                '}';
     }
 
     public String getStatus() {

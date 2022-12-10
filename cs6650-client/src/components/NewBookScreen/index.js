@@ -10,13 +10,12 @@ const NewBookScreen = () => {
     const {currentUser} = useSelector((state) => state.users)
 
     const [name, setName] = useState("");
-    const [quantity, setQuantity] = useState("");
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const onAddBtnClick = async () => {
-        const newBook = {name, quantity, userId: currentUser.id, status: "shelf", sellCost: 0.00};
+        const newBook = {name, userId: currentUser.id, status: "shelf", sellCost: 0.00};
         await dispatch(addBookThunk(newBook));
         navigate("/");
     }
@@ -33,10 +32,6 @@ const NewBookScreen = () => {
                     <input value={name} onChange={(e) => setName(e.target.value)}/>
                 </label>
                 <br/>
-                <label>
-                    Quantity:
-                    <input value={quantity} onChange={(e) => setQuantity(e.target.value)} type={"number"}/>
-                </label>
                 <br/>
                 <button className={"btn btn-secondary"} onClick={onAddBtnClick}>Add</button>
             </div>
