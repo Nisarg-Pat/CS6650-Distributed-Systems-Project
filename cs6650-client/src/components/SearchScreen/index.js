@@ -1,10 +1,17 @@
 import NavBar from "../NavBar";
-import React from "react";
+import React, {useState} from "react";
 
 
 const SearchScreen = () => {
+
+    const [search, setSearch] = useState('');
+
     return (
-        <NavBar/>
+        <>
+            <NavBar/>
+            <input value={search} onChange={(e) => setSearch(e.target.value)}/>
+        </>
+
     );
 }
 

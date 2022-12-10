@@ -6,8 +6,10 @@ import com.example.cs6650.server.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BookService {
@@ -33,5 +35,9 @@ public class BookService {
             book.setStatus("sell");
             bookRepository.save(book);
         }
+    }
+
+    public List<Book> searchBook(String name) {
+        return bookRepository.findAll().stream().filter((book) -> book.getName().startsWith(name)).toList();
     }
 }
