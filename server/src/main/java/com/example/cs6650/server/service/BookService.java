@@ -38,6 +38,7 @@ public class BookService {
     }
 
     public List<Book> searchBook(String name) {
+        System.out.println("Search:"+name);
         return bookRepository.findAll().stream().filter((book) -> book.getName().startsWith(name)).toList();
     }
 }

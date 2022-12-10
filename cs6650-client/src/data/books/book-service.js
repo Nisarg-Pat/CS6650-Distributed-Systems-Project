@@ -16,3 +16,8 @@ export const sellBook = async (book) => {
     const response = await api.post(`${BOOK_URL}/sell`, book)
     return response.data
 }
+
+export const searchBook = async (search) => {
+    const response = await api.get(`${BOOK_URL}/search/${search}`)
+    return response.data
+}

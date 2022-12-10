@@ -1,11 +1,12 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {addBookThunk, bookListThunk, sellBookThunk} from "./books-thunk";
+import {addBookThunk, bookListThunk, searchBookThunk, sellBookThunk} from "./books-thunk";
 
 const booksReducer = createSlice({
         name: 'books',
         initialState: {
             shelfList: [],
-            sellList: []
+            sellList: [],
+            searchList: []
         },
         reducers:{
         },
@@ -20,6 +21,9 @@ const booksReducer = createSlice({
             [sellBookThunk.fulfilled]: (state, action) => {
                 state.shelfList = state.shelfList.filter((book) => book.id !== action.payload.id)
                 state.sellList.push(action.payload)
+            },
+            [searchBookThunk.fulfilled]: (state, action) => {
+                state.searchList = action.payload;
             }
         }
     }

@@ -23,6 +23,12 @@ public class ServerApplication {
             userRepository.save(user);
             Book book = new Book("a1", 1, 1, "shelf", 5.00);
             bookRepository.save(book);
+            book = new Book("a2", 1, 1, "sell", 5.00);
+            bookRepository.save(book);
+            book = new Book("a3", 1, 1, "sell", 5.00);
+            bookRepository.save(book);
+            book = new Book("a4", 1, 1, "sell", 5.00);
+            bookRepository.save(book);
         };
     }
 
