@@ -11,3 +11,8 @@ export const getBookListOfUser = async (user) => {
     const response = await api.post(`${BOOK_URL}/booklist`, user)
     return response.data
 }
+
+export const sellBook = async (book) => {
+    const response = await api.post(`${BOOK_URL}/sell`, book)
+    return response.data
+}

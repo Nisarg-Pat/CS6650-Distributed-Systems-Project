@@ -13,14 +13,19 @@ public class Book {
     private String name;
     private int quantity;
     private int userId;
+    private String status;
+    private double sellCost;
 
     public Book() {
 
     }
 
-    public Book(@NonNull String name, @NonNull int quantity) {
+    public Book(@NonNull String name, @NonNull int quantity, @NonNull int userId, @NonNull String status, @NonNull double sellCost) {
         this.name = name;
         this.quantity = quantity;
+        this.userId = userId;
+        this.status = status;
+        this.sellCost = sellCost;
     }
 
     public Integer getId() {
@@ -58,5 +63,21 @@ public class Book {
     @Override
     public String toString() {
         return "Book {name="+name+", quantity="+quantity+"}";
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public double getSellCost() {
+        return sellCost;
+    }
+
+    public void setSellCost(double sellCost) {
+        this.sellCost = sellCost;
     }
 }

@@ -16,7 +16,7 @@ const NewBookScreen = () => {
     const navigate = useNavigate();
 
     const onAddBtnClick = async () => {
-        const newBook = {name, quantity, userId: currentUser.id};
+        const newBook = {name, quantity, userId: currentUser.id, status: "shelf", sellCost: 0.00};
         await dispatch(addBookThunk(newBook));
         navigate("/");
     }

@@ -28,18 +28,29 @@ public class BookController {
     private BookService bookService;
 
     @PostMapping("/addbook")
-    public ResponseEntity<Book> createUser(@RequestBody Book book) {
+    public ResponseEntity<Book> addBook(@RequestBody Book book) {
         System.out.println("In Add Book:"+book);
         Optional<User> user = userService.getUserFromId(book.getUserId());
         if(user.isEmpty()) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
         bookService.addBook(book);
-        return new ResponseEntity<>(bookService.getBook(book.getId()).get(), HttpStatus.CREATED);
+        return new ResponseEntity<>(book, HttpStatus.CREATED);
     }
 
     @PostMapping("/booklist")
     public ResponseEntity<List<Book>> getBookListOfUser(@RequestBody User user) {
         return new ResponseEntity<>(bookService.getListOfBooks(user), HttpStatus.OK);
+    }
+
+    @PostMapping("/sell")
+    public ResponseEntity<Book> sellBook(@RequestBody Book book) {
+        System.out.println("In Sell Book:"+book);
+        Optional<User> user = userService.getUserFromId(book.getUserId());
+        if(user.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+        bookService.sellBook(book);
+        return new ResponseEntity<>(bookService.getBook(book.getId()).get(), HttpStatus.OK);
     }
 }

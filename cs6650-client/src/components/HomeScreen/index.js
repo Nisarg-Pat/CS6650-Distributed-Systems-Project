@@ -3,10 +3,11 @@ import {useDispatch, useSelector} from "react-redux";
 import NavBar from "../NavBar";
 import React, {useEffect} from "react";
 import {bookListThunk} from "../../data/books/books-thunk";
+import BookItem from "./BookItem";
 
 const HomeScreen = () => {
     const {currentUser} = useSelector((state) => state.users)
-    const {booksList} = useSelector((state) => state.books)
+    const {shelfList, sellList} = useSelector((state) => state.books)
 
     const dispatch = useDispatch()
 
@@ -37,24 +38,18 @@ const HomeScreen = () => {
                         <h2>
                             Your Book Shelf
                         </h2>
-                        <ul>
-                            {
-                                booksList.map((book) =>
-                                <li key={book.id}>{book.name}</li>)
-                            }
-                        </ul>
-                        {/*{bookList.map((item) => {*/}
-                        {/*    return (*/}
-                        {/*    <li>*/}
-                        {/*        {item.name}*/}
-                        {/*    </li>)*/}
-                        {/*})}*/}
+                        {
+                            shelfList.map((book, key) => <BookItem book={book} key={key}/>)
+                        }
                         <Link to={"/newbook"} className={"btn btn-dark"}>Add</Link>
                     </div>
                     <div>
                         <h2>
                             Sell List
                         </h2>
+                        {
+                            sellList.map((book, key) => <BookItem book={book} key={key}/>)
+                        }
                     </div>
                 </>
             }

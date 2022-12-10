@@ -26,4 +26,12 @@ public class BookService {
     public List<Book> getListOfBooks(User user) {
         return bookRepository.findBookByUserId(user.getId());
     }
+
+    public void sellBook(Book oldBook) {
+        if(bookRepository.findById(oldBook.getId()).isPresent()) {
+            Book book = bookRepository.findById(oldBook.getId()).get();
+            book.setStatus("sell");
+            bookRepository.save(book);
+        }
+    }
 }
