@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {loginThunk} from "../../data/users/users-thunks";
 import NavBar from "../NavBar";
+import {Navigate} from "react-router-dom";
 
 const LoginScreen = () => {
     const [username, setUsername] = useState("");
@@ -18,6 +19,9 @@ const LoginScreen = () => {
 
     return (
         <div className={"row"}>
+            {
+                currentUser && <Navigate to={'/'} replace={true}/>
+            }
             <NavBar/>
             <div className={"ds-text-center"}>
                 <label>
@@ -32,12 +36,6 @@ const LoginScreen = () => {
                 <br/>
                 <button className={"btn btn-secondary"} onClick={onLoginBtnClick}>Login</button>
             </div>
-            {
-                currentUser &&
-                <h2>
-                    Hello {currentUser.name}
-                </h2>
-            }
         </div>
     )
 

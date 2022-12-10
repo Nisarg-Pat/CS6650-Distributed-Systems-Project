@@ -2,14 +2,16 @@ import React, {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {signupThunk} from "../../data/users/users-thunks";
 import NavBar from "../NavBar";
+import {Navigate} from "react-router-dom";
 
 const SignupScreen = () => {
+
+    const {currentUser} = useSelector((state) => state.users)
+
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
-
-    const {currentUser} = useSelector((state) => state.users)
 
     const dispatch = useDispatch();
 
@@ -20,6 +22,9 @@ const SignupScreen = () => {
 
     return (
         <div className={"row"}>
+            {
+                currentUser && <Navigate to={'/'} replace={true}/>
+            }
             <NavBar/>
             <div className={"ds-text-center"}>
                 <label>
@@ -43,12 +48,6 @@ const SignupScreen = () => {
                 </label>
                 <br/>
                 <button className={"btn btn-secondary"} onClick={onSignupBtnClick}>Signup</button>
-                {
-                    currentUser &&
-                    <h2>
-                        Hello {currentUser.name}
-                    </h2>
-                }
             </div>
         </div>
     )

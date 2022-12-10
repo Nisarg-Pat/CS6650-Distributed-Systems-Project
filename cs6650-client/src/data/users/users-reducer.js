@@ -7,9 +7,6 @@ const usersReducer = createSlice({
         currentUser: null
     },
     reducers:{
-        logout: (state) => {
-            state.currentUser = null;
-        }
     },
     extraReducers: {
         [signupThunk.fulfilled]: (state, action) => {
