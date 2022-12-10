@@ -52,4 +52,13 @@ public class UserController {
         }
         return new ResponseEntity<>(getUser.get(), HttpStatus.OK);
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<User> logout(@RequestBody User user) {
+        Optional<User> getUser = userService.getUserFromUsernamePassword(user.getUsername(), user.getPassword());
+        if(getUser.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(getUser.get(), HttpStatus.OK);
+    }
 }
