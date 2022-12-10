@@ -7,6 +7,8 @@ import BookItem from "../BookItem";
 
 const SearchScreen = () => {
 
+    const {currentUser} = useSelector((state) => state.users)
+
     const {searchList} = useSelector((state) => state.books);
 
     const dispatch = useDispatch();
@@ -24,7 +26,9 @@ const SearchScreen = () => {
             <NavBar/>
             <input onChange={(e) => searchHandler(e.target.value)}/>
             {
-                searchList.map((book, key) => <BookItem book={book} key={key} type={'search'}/>)
+                searchList
+                    .filter((book) => currentUser === null || book.userId !== currentUser.id)
+                    .map((book, key) => <BookItem book={book} key={key} type={'search'}/>)
             }
         </>
 

@@ -7,6 +7,7 @@ import {deleteBookThunk, sellBookThunk, shelfBookThunk} from "../../data/books/b
 const BookItem = ({book, type}) => {
 
     const {currentUser} = useSelector((state) => state.users)
+    const {cartList} = useSelector((state) => state.carts)
 
     const [openSell, setOpenSell] = useState(false);
     const [sellPrice, setSellPrice] = useState(0);
@@ -16,7 +17,7 @@ const BookItem = ({book, type}) => {
 
     const onClickSellBook = () => {
         setOpenSell(false)
-        const newBook = {id:book.id, name:book.name, userId: book.userId, status: book.status, sellPrice: sellPrice}
+        const newBook = {id: book.id, name: book.name, userId: book.userId, status: book.status, sellPrice: sellPrice}
         dispatch(sellBookThunk(newBook));
     }
 
@@ -34,6 +35,10 @@ const BookItem = ({book, type}) => {
         navigate("/cart");
     }
 
+    const isInCart = (book) => {
+        return cartList.find((cartBook) => cartBook.id === book.id);
+    }
+
     const typeSpecificDiv = () => {
         if (type === 'shelf') {
             return (
@@ -48,9 +53,11 @@ const BookItem = ({book, type}) => {
                     {
                         openSell &&
                         <>
-                            <input type={"number"} value={sellPrice} onChange={(e) => setSellPrice(parseInt(e.target.value))}/>
+                            <input type={"number"} value={sellPrice}
+                                   onChange={(e) => setSellPrice(parseInt(e.target.value))}/>
                             <button className={"btn btn-danger ms-2"} onClick={onClickSellBook}> Sell</button>
-                            <button className={"btn btn-danger ms-2"} onClick={() => setOpenSell(false)}> Cancel</button>
+                            <button className={"btn btn-danger ms-2"} onClick={() => setOpenSell(false)}> Cancel
+                            </button>
                         </>
                     }
                 </>)
@@ -60,14 +67,31 @@ const BookItem = ({book, type}) => {
                 <>
                     <span className={'ms-2'}>
                         ${book.sellPrice}
-                        <button className={"btn btn-danger ms-2"} onClick={onClickShelfBook}> Back to Shelf</button>
                     </span>
-
+                    <button className={"btn btn-danger ms-2"} onClick={onClickShelfBook}> Back to Shelf</button>
                 </>)
         } else if (type === 'search') {
             return (
                 <>
-                    <button className={"btn btn-danger"} onClick={onClickAddToCartBtn}> Add To Cart </button>
+                    {
+                        !isInCart(book) &&
+                        <>
+                            <span className={'ms-2'}>
+                                ${book.sellPrice}
+                            </span>
+                            <button className={"btn btn-danger ms-2"} onClick={onClickAddToCartBtn}>Add to Cart</button>
+                        </>
+
+                    }
+                    {
+                        isInCart(book) &&
+                        <>
+                            <span className={'ms-2'}>
+                                ${book.sellPrice}
+                            </span>
+                            <button className={"btn btn-outline-danger disabled"}>Already In Cart</button>
+                        </>
+                    }
                 </>
             )
         } else if (type === 'cart') {

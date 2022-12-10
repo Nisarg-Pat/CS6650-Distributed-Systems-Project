@@ -4,16 +4,16 @@ import {addToCartThunk, getCartThunk} from "./carts-thunk";
 const booksReducer = createSlice({
         name: 'carts',
         initialState: {
-            userCart: []
+            cartList: []
         },
         reducers:{
         },
         extraReducers: {
             [getCartThunk.fulfilled]: (state, action) => {
-                state.userCart = action.payload;
+                state.cartList = action.payload;
             },
             [addToCartThunk.fulfilled]: (state, action) => {
-                state.userCart.push(action.payload);
+                state.cartList.push(action.payload);
             }
         }
     }

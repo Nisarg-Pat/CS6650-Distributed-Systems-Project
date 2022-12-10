@@ -6,7 +6,7 @@ import BookItem from "../BookItem";
 
 const CartScreen = () => {
     const {currentUser} = useSelector((state) => state.users);
-    const {userCart} = useSelector((state) => state.carts);
+    const {cartList} = useSelector((state) => state.carts);
 
     const dispatch = useDispatch();
 
@@ -18,7 +18,7 @@ const CartScreen = () => {
         <>
             <NavBar/>
             {
-                userCart.map((book, key) => <BookItem book={book} key={key} type={'cart'}/>)
+                cartList.map((book, key) => <BookItem book={book} key={key} type={'cart'}/>)
             }
         </>
     );

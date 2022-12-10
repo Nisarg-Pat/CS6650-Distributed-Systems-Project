@@ -27,18 +27,21 @@ const NavBar = () => {
                     Search Books
                 </Link>
             </li>
-            <li className="nav-item">
-                <Link to="/cart" className={`nav-link ${parts[1] === 'cart' ? 'active' : ''}`}>
-                    Cart
-                </Link>
-            </li>
             {
                 currentUser &&
-                <li className="nav-item">
-                    <button className={`btn btn-danger`} onClick={logoutBtnClick}>
-                        Logout
-                    </button>
-                </li>
+                <>
+                    <li className="nav-item">
+                        <Link to="/cart" className={`nav-link ${parts[1] === 'cart' ? 'active' : ''}`}>
+                            Cart
+                        </Link>
+                    </li>
+                    <li className="nav-item">
+                        <button className={`btn btn-danger`} onClick={logoutBtnClick}>
+                            Logout
+                        </button>
+                    </li>
+                </>
+
             }
         </ul>
     )
