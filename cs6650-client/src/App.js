@@ -9,6 +9,8 @@ import usersReducer from "./data/users/users-reducer";
 import {configureStore} from "@reduxjs/toolkit";
 import {Provider} from "react-redux";
 import LoginScreen from "./components/LoginScreen";
+import SearchScreen from "./components/SearchScreen";
+import CartScreen from "./components/CartScreen";
 
 const store = configureStore({
     reducer:{
@@ -25,6 +27,8 @@ function App() {
                     <Route index element={<HomeScreen/>}/>
                     <Route path={"/signup"} element={<SignupScreen/>}/>
                     <Route path={"/login"} element={<LoginScreen/>}/>
+                    <Route path={"/search"} element={<SearchScreen/>}/>
+                    <Route path={"/cart"} element={<CartScreen/>}/>
                 </Routes>
             </BrowserRouter>
         </Provider>

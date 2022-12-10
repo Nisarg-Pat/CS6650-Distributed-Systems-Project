@@ -9,13 +9,21 @@ const HomeScreen = () => {
     return (
         <>
             <NavBar/>
-            <Link to={"/signup"} className={"btn btn-primary"}>Signup</Link>
-            <Link to={"/login"} className={"btn btn-primary"}>Login</Link>
+            {
+                !currentUser &&
+                <>
+                    <Link to={"/signup"} className={"btn btn-primary"}>Signup</Link>
+                    <Link to={"/login"} className={"btn btn-primary"}>Login</Link>
+                </>
+            }
+
             {
                 currentUser &&
-                <h2>
-                    Hello {currentUser.name}
-                </h2>
+                <>
+                    <h2>
+                        Hello {currentUser.name}
+                    </h2>
+                </>
             }
         </>
     )
