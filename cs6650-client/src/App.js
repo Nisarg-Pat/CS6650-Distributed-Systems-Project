@@ -13,11 +13,13 @@ import SearchScreen from "./components/SearchScreen";
 import CartScreen from "./components/CartScreen";
 import NewBookScreen from "./components/NewBookScreen";
 import booksReducer from "./data/books/books-reducer";
+import cartsReducer from "./data/carts/carts-reducer";
 
 const store = configureStore({
     reducer:{
         users: usersReducer,
-        books: booksReducer
+        books: booksReducer,
+        carts: cartsReducer
     }
 })
 

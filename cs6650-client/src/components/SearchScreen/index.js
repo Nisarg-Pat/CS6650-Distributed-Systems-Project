@@ -1,8 +1,8 @@
 import NavBar from "../NavBar";
-import React, {useState} from "react";
+import React from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {searchBookThunk} from "../../data/books/books-thunk";
-import BookItem from "../HomeScreen/BookItem";
+import BookItem from "../SearchScreen/BookItem";
 
 
 const SearchScreen = () => {
