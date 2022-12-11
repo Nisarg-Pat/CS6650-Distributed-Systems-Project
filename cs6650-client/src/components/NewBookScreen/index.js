@@ -17,7 +17,7 @@ const NewBookScreen = () => {
     const onAddBtnClick = async () => {
         const newBook = {name, userId: currentUser.id, status: "shelf", sellPrice: 0.00};
         await dispatch(addBookThunk(newBook));
-        navigate("/");
+        navigate("/home");
     }
 
     return (

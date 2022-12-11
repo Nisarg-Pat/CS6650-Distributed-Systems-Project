@@ -30,6 +30,7 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route index element={<HomeScreen/>}/>
+                    <Route path={"/home"} element={<HomeScreen/>}/>
                     <Route path={"/signup"} element={<SignupScreen/>}/>
                     <Route path={"/login"} element={<LoginScreen/>}/>
                     <Route path={"/search"} element={<SearchScreen/>}/>

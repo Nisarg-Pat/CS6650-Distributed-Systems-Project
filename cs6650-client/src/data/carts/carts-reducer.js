@@ -7,6 +7,9 @@ const booksReducer = createSlice({
             cartList: []
         },
         reducers:{
+            resetCarts (state, action) {
+                state.cartList = [];
+            }
         },
         extraReducers: {
             [getCartThunk.fulfilled]: (state, action) => {
@@ -19,4 +22,5 @@ const booksReducer = createSlice({
     }
 )
 
+export const {resetCarts} = booksReducer.actions;
 export default booksReducer.reducer;

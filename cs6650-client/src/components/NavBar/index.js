@@ -1,24 +1,29 @@
 import React from "react";
-import {Link, useLocation} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {logoutThunk} from "../../data/users/users-thunks";
+import {resetBooks} from "../../data/books/books-reducer";
+import {resetCarts} from "../../data/carts/carts-reducer";
 
 const NavBar = () => {
     const {currentUser} = useSelector((state) => state.users)
     const {pathname} = useLocation()
     const parts = pathname.split('/')
-    console.log(currentUser)
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-    const logoutBtnClick = () => {
-        dispatch(logoutThunk(currentUser));
+    const logoutBtnClick = async () => {
+        await dispatch(logoutThunk(currentUser));
+        dispatch(resetBooks())
+        dispatch(resetCarts())
+        navigate("/home");
     }
 
     return (
         <ul className="nav nav-pills mb-4">
             <li className="nav-item">
-                <Link to="/" className={`nav-link ${parts[1] === '' ? 'active' : ''}`}>
+                <Link to="/home" className={`nav-link ${parts[1] === '' || parts[1] === 'home' ? 'active' : ''}`}>
                     Home
                 </Link>
             </li>

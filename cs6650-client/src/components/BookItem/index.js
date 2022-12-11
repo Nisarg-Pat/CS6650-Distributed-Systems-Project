@@ -30,9 +30,13 @@ const BookItem = ({book, type}) => {
     }
 
     const onClickAddToCartBtn = async () => {
-        const cart = {userId: currentUser.id, bookId: book.id}
-        await dispatch(addToCartThunk(cart))
-        navigate("/cart");
+        if(!currentUser) {
+            navigate("/login");
+        } else {
+            const cart = {userId: currentUser.id, bookId: book.id}
+            await dispatch(addToCartThunk(cart))
+            navigate("/cart");
+        }
     }
 
     const isInCart = (book) => {

@@ -16,8 +16,10 @@ const booksReducer = createSlice({
             searchList: []
         },
         reducers:{
-            initSearch(state, action) {
-                state.searchList = []
+            resetBooks (state, action) {
+                state.shelfList = [];
+                state.sellList = [];
+                state.searchList = [];
             }
         },
         extraReducers: {
@@ -46,5 +48,5 @@ const booksReducer = createSlice({
     }
 )
 
-export const {initSearch} = booksReducer.actions;
+export const {resetBooks} = booksReducer.actions;
 export default booksReducer.reducer;
