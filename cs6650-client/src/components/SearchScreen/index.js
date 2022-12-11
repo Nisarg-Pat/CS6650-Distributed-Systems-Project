@@ -24,12 +24,21 @@ const SearchScreen = () => {
     return (
         <>
             <NavBar/>
-            <input onChange={(e) => searchHandler(e.target.value)}/>
-            {
-                searchList
-                    .filter((book) => currentUser === null || book.userId !== currentUser.id)
-                    .map((book, key) => <BookItem book={book} key={key} type={'search'}/>)
-            }
+            <h2 className={"mb-4"}>
+                Search: <input onChange={(e) => searchHandler(e.target.value)}/>
+            </h2>
+            <div className={"row"}>
+                {
+                    searchList
+                        .filter((book) => currentUser === null || book.userId !== currentUser.id)
+                        .map((book, key) =>
+                            <div className={"col-3 mb-4"}>
+                                <BookItem book={book} key={key} type={'search'}/>
+                            </div>)
+                }
+            </div>
+
+
         </>
 
     );

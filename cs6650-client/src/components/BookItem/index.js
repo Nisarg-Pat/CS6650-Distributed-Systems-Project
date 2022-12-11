@@ -51,7 +51,7 @@ const BookItem = ({book, type}) => {
     const typeSpecificDiv = () => {
         if (type === 'shelf') {
             return (
-                <div>
+                <div className={"ds-text-center"}>
                     <div className={"mb-2"}>
                         {book.name}
                     </div>
@@ -59,7 +59,7 @@ const BookItem = ({book, type}) => {
                         {
                             !openSell &&
                             <>
-                                <button className={"btn btn-danger ms-2"} onClick={() => setOpenSell(true)}> Sell</button>
+                                <button className={"btn btn-danger"} onClick={() => setOpenSell(true)}> Sell</button>
                                 <button className={"btn btn-danger ms-2"} onClick={onClickDeleteBook}> Delete</button>
                             </>
                         }
@@ -71,7 +71,7 @@ const BookItem = ({book, type}) => {
                                                     onChange={(e) => setSellPrice(parseInt(e.target.value))}/>
                                 </div>
                                 <div>
-                                    <button className={"btn btn-danger ms-2"} onClick={onClickSellBook}> Sell</button>
+                                    <button className={"btn btn-danger"} onClick={onClickSellBook}> Sell</button>
                                     <button className={"btn btn-danger ms-2"} onClick={() => setOpenSell(false)}> Cancel </button>
                                 </div>
                             </>
@@ -81,47 +81,55 @@ const BookItem = ({book, type}) => {
 
         } else if (type === 'sell') {
             return (
-                <>
-                    {book.name}
-                    <span className={'ms-2'}>
-                        ${book.sellPrice}
-                    </span>
-                    <button className={"btn btn-danger ms-2"} onClick={onClickShelfBook}> Back to Shelf</button>
-                </>)
+                <div className={"ds-text-center"}>
+                    <div className={"mb-2"}>
+                        {book.name}
+                    </div>
+                    <div className={'mb-2'}>
+                        Price: ${book.sellPrice}
+                    </div>
+                    <div>
+                        <button className={"btn btn-danger"} onClick={onClickShelfBook}> Back to Shelf</button>
+                    </div>
+
+                </div>)
         } else if (type === 'search') {
             return (
-                <>
-                    {book.name}
+                <div className={"ds-text-center"}>
+                    <div className={"mb-2"}>
+                        {book.name}
+                    </div>
                     {
                         !isInCart(book) &&
                         <>
-                            <span className={'ms-2'}>
+                            <div className={'mb-2'}>
                                 ${book.sellPrice}
-                            </span>
-                            <button className={"btn btn-danger ms-2"} onClick={onClickAddToCartBtn}>Add to Cart</button>
+                            </div>
+                            <button className={"btn btn-danger"} onClick={onClickAddToCartBtn}>Add to Cart</button>
                         </>
-
                     }
                     {
                         isInCart(book) &&
                         <>
-                            <span className={'ms-2'}>
+                            <div className={'mb-2'}>
                                 ${book.sellPrice}
-                            </span>
+                            </div>
                             <button className={"btn btn-outline-danger disabled"}>Already In Cart</button>
                         </>
                     }
-                </>
+                </div>
             )
         } else if (type === 'cart') {
             return (
-                <>
-                    {book.name}
-                    <span className={'ms-2'}>
-                        ${book.sellPrice}
-                        <button className={"btn btn-danger ms-2"} onClick={onClickRemoveFromCartBtn}>Remove</button>
-                    </span>
-                </>
+                <div className={"ds-text-center"}>
+                    <h2 className={"ds-left mb-0"}>
+                        {book.name}
+                    </h2>
+                    <h2 className={'ds-right mb-0'}>
+                        ${book.sellPrice} <button className={"btn btn-danger ds-cart-btn"} onClick={onClickRemoveFromCartBtn}>Remove</button>
+                    </h2>
+                    <div className={"ds-clear"}/>
+                </div>
             )
         }
     }

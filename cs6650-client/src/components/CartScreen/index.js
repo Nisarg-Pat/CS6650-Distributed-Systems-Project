@@ -27,12 +27,26 @@ const CartScreen = () => {
     return (
         <>
             <NavBar/>
+            <h2>
+                Cart
+            </h2>
             {
-                cartList.map((book, key) => <BookItem book={book} key={key} type={'cart'}/>)
+                cartList.map((book, key) => <div className={"mb-4"}>
+                    <BookItem book={book} key={key} type={'cart'}/>
+                </div>)
             }
-            Total: ${cartList.reduce((acc, book) => acc + book.sellPrice, 0)}
-            <br/>
-            <button className={"btn btn-dark"} onClick={buyBtnClickHandler}>Buy</button>
+            <div>
+                <h2 className={"ds-left"}>
+                    Total:
+                </h2>
+                <h2 className={"ds-right"}>
+                    ${cartList.reduce((acc, book) => acc + book.sellPrice, 0)} {
+                        cartList.length !== 0 &&
+                        <button className={"btn ds-btn-green ds-cart-btn me-2"} onClick={buyBtnClickHandler}>Buy</button>}
+                </h2>
+                <div className={"ds-clear"}/>
+            </div>
+
         </>
     );
 }

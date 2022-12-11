@@ -34,7 +34,7 @@ const HomeScreen = () => {
             {
                 currentUser &&
                 <>
-                    <h2>
+                    <h2 className={"mb-4"}>
                         Hello {currentUser.name}
                     </h2>
                     <div className={"row"}>
@@ -46,7 +46,7 @@ const HomeScreen = () => {
                                 <div className={"row"}>
                                     {
                                         shelfList.map((book, key) =>
-                                        <div className={"col-6 mb-4 ds-text-center"}>
+                                        <div className={"col-6 mb-4"}>
                                             <BookItem book={book} key={key} type={'shelf'}/>
                                         </div>)
                                     }
@@ -59,9 +59,14 @@ const HomeScreen = () => {
                                 <h2>
                                     Your Sell List
                                 </h2>
-                                {
-                                    sellList.map((book, key) => <BookItem book={book} key={key} type={'sell'}/>)
-                                }
+                                <div className={"row"}>
+                                    {
+                                        sellList.map((book, key) =>
+                                        <div className={"col-6 mb-4"}>
+                                            <BookItem book={book} key={key} type={'sell'}/>
+                                        </div>)
+                                    }
+                                </div>
                             </div>
                         </div>
                     </div>

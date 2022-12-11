@@ -27,3 +27,11 @@
 .ds-right {
     float: right;
 }
+
+.ds-left {
+    float: left;
+}
+
+.ds-clear {
+    clear: both;
+}
