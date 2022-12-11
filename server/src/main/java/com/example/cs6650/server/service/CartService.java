@@ -37,4 +37,8 @@ public class CartService {
     public Optional<Cart> getCart(Cart cart) {
         return cartRepository.getCartByUserIdAndBookId(cart.getUserId(), cart.getBookId());
     }
+
+    public List<Cart> allCarts() {
+        return cartRepository.findAll();
+    }
 }

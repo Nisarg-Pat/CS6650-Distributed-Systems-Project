@@ -1,5 +1,6 @@
 package com.example.cs6650.server.service;
 
+import com.example.cs6650.server.model.Cart;
 import com.example.cs6650.server.model.User;
 import com.example.cs6650.server.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,10 @@ public class UserService {
             userRepository.save(user);
         }
 
+    }
+
+    public List<User> allUsers() {
+        return userRepository.findAll();
     }
 
 }
