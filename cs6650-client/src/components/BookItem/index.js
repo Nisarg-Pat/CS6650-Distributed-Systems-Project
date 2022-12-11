@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {addToCartThunk} from "../../data/carts/carts-thunk";
+import {addToCartThunk, removeFromCartThunk} from "../../data/carts/carts-thunk";
 import {useNavigate} from "react-router-dom";
 import {deleteBookThunk, sellBookThunk, shelfBookThunk} from "../../data/books/books-thunk";
 
@@ -39,6 +39,11 @@ const BookItem = ({book, type}) => {
         }
     }
 
+    const onClickRemoveFromCartBtn = () => {
+        const cart = {userId: currentUser.id, bookId: book.id}
+        dispatch(removeFromCartThunk(cart))
+    }
+
     const isInCart = (book) => {
         return cartList.find((cartBook) => cartBook.id === book.id);
     }
@@ -57,7 +62,7 @@ const BookItem = ({book, type}) => {
                     {
                         openSell &&
                         <>
-                            <input type={"number"} value={sellPrice}
+                            <input type={"number"} value={sellPrice} min={"0"}
                                    onChange={(e) => setSellPrice(parseInt(e.target.value))}/>
                             <button className={"btn btn-danger ms-2"} onClick={onClickSellBook}> Sell</button>
                             <button className={"btn btn-danger ms-2"} onClick={() => setOpenSell(false)}> Cancel
@@ -103,6 +108,7 @@ const BookItem = ({book, type}) => {
                 <>
                     <span className={'ms-2'}>
                         ${book.sellPrice}
+                        <button className={"btn btn-danger ms-2"} onClick={onClickRemoveFromCartBtn}>Remove</button>
                     </span>
                 </>
             )

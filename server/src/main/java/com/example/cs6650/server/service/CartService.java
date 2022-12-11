@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CartService {
@@ -23,5 +24,13 @@ public class CartService {
 
     public void addCart(Cart cart) {
         cartRepository.save(cart);
+    }
+
+    public void removeCart(Cart cart) {
+        cartRepository.delete(cart);
+    }
+
+    public Optional<Cart> getCart(Cart cart) {
+        return cartRepository.getCartByUserIdAndBookId(cart.getUserId(), cart.getBookId());
     }
 }

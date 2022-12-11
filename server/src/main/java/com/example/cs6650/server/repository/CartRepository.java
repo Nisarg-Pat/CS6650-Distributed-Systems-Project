@@ -12,5 +12,4 @@ public interface CartRepository extends JpaRepository<Cart, Integer> {
     List<Cart> getCartByUserId(int id);
 
     Optional<Cart> getCartByUserIdAndBookId(int userId, int bookId);
-
 }

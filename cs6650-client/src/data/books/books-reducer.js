@@ -7,7 +7,7 @@ import {
     sellBookThunk,
     shelfBookThunk
 } from "./books-thunk";
-import {addToCartThunk, buyCartThunk, getCartThunk} from "../carts/carts-thunk";
+import {addToCartThunk, buyCartThunk, getCartThunk, removeFromCartThunk} from "../carts/carts-thunk";
 
 const booksReducer = createSlice({
         name: 'books',
@@ -47,7 +47,6 @@ const booksReducer = createSlice({
             [searchBookThunk.fulfilled]: (state, action) => {
                 state.searchList = action.payload;
             },
-
             [getCartThunk.fulfilled]: (state, action) => {
                 state.cartList = action.payload;
             },
@@ -57,6 +56,10 @@ const booksReducer = createSlice({
             [buyCartThunk.fulfilled]: (state, action) => {
                 state.cartList = [];
                 state.shelfList.concat(action.payload)
+            },
+            [removeFromCartThunk.fulfilled]: (state, action) => {
+                console.log(action.payload);
+                state.cartList = state.cartList.filter((cart) => cart.id !== action.payload)
             }
         }
     }

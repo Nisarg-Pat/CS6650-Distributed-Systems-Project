@@ -48,6 +48,7 @@ public class CartController {
 
     @PostMapping("/addtocart")
     public ResponseEntity<Book> addToCart(@RequestBody Cart cart) {
+        System.out.println("Add:"+cart);
         Optional<User> user = userService.getUserFromId(cart.getUserId());
         if(user.isEmpty()) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -58,6 +59,17 @@ public class CartController {
         }
         cartService.addCart(cart);
         return new ResponseEntity<>(book.get(), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/remove")
+    public ResponseEntity<Integer> deleteFromCart(@RequestBody Cart cart) {
+        System.out.println("Remove"+cart);
+        Optional<Cart> ocart = cartService.getCart(cart);
+        if(ocart.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+        cartService.removeCart(ocart.get());
+        return new ResponseEntity<>(cart.getBookId(), HttpStatus.OK);
     }
 
     @PostMapping("/buycart")

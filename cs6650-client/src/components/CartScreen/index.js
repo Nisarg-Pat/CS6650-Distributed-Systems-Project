@@ -16,11 +16,13 @@ const CartScreen = () => {
         dispatch(getCartThunk(currentUser))
     }, [currentUser, dispatch])
 
-    const buyBtnClickHandler = () => {
+    const buyBtnClickHandler = async () => {
         const cart = {bookList:cartList, newUser:currentUser}
-        dispatch(buyCartThunk(cart));
+        await dispatch(buyCartThunk(cart));
         navigate("/home");
     }
+
+    console.log(cartList)
 
     return (
         <>

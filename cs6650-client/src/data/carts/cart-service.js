@@ -12,6 +12,11 @@ export const addToCart = async (cart) => {
     return response.data;
 }
 
+export const removeFromCart = async (cart) => {
+    const response = await api.post(`${BOOK_URL}/remove`, cart);
+    return response.data;
+}
+
 export const buyCart = async (cart) => {
     const response = await api.post(`${BOOK_URL}/buycart`, cart);
     return response.data;
