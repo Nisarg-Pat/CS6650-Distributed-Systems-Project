@@ -14,3 +14,16 @@
 .ds-height-full {
     height: 100%;
 }
+
+.ds-width-full {
+    width: 100%;
+}
+
+.ds-border {
+    border: 1px solid grey;
+    border-radius: 16px;
+}
+
+.ds-right {
+    float: right;
+}

@@ -37,23 +37,35 @@ const HomeScreen = () => {
                     <h2>
                         Hello {currentUser.name}
                     </h2>
-                    <div>
-                        <h2>
-                            Your Book Shelf
-                        </h2>
-                        {
-                            shelfList.map((book, key) => <BookItem book={book} key={key} type={'shelf'}/>)
-                        }
-                        <Link to={"/newbook"} className={"btn btn-dark"}>Add</Link>
+                    <div className={"row"}>
+                        <div className={"col-6"}>
+                            <div className={"ds-border p-2"}>
+                                <h2>
+                                    Your Book Shelf <Link to={"/newbook"} className={"btn ds-btn-green ds-right"}>Add</Link>
+                                </h2>
+                                <div className={"row"}>
+                                    {
+                                        shelfList.map((book, key) =>
+                                        <div className={"col-6 mb-4 ds-text-center"}>
+                                            <BookItem book={book} key={key} type={'shelf'}/>
+                                        </div>)
+                                    }
+                                </div>
+
+                            </div>
+                        </div>
+                        <div className={"col-6"}>
+                            <div className={"ds-border p-2"}>
+                                <h2>
+                                    Your Sell List
+                                </h2>
+                                {
+                                    sellList.map((book, key) => <BookItem book={book} key={key} type={'sell'}/>)
+                                }
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <h2>
-                            Your Sell List
-                        </h2>
-                        {
-                            sellList.map((book, key) => <BookItem book={book} key={key} type={'sell'}/>)
-                        }
-                    </div>
+
                 </>
             }
         </>

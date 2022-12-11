@@ -51,29 +51,38 @@ const BookItem = ({book, type}) => {
     const typeSpecificDiv = () => {
         if (type === 'shelf') {
             return (
-                <>
-                    {
-                        !openSell &&
-                        <>
-                            <button className={"btn btn-danger ms-2"} onClick={() => setOpenSell(true)}> Sell</button>
-                            <button className={"btn btn-danger ms-2"} onClick={onClickDeleteBook}> Delete</button>
-                        </>
-                    }
-                    {
-                        openSell &&
-                        <>
-                            <input type={"number"} value={sellPrice} min={"0"}
-                                   onChange={(e) => setSellPrice(parseInt(e.target.value))}/>
-                            <button className={"btn btn-danger ms-2"} onClick={onClickSellBook}> Sell</button>
-                            <button className={"btn btn-danger ms-2"} onClick={() => setOpenSell(false)}> Cancel
-                            </button>
-                        </>
-                    }
-                </>)
+                <div>
+                    <div className={"mb-2"}>
+                        {book.name}
+                    </div>
+                    <div>
+                        {
+                            !openSell &&
+                            <>
+                                <button className={"btn btn-danger ms-2"} onClick={() => setOpenSell(true)}> Sell</button>
+                                <button className={"btn btn-danger ms-2"} onClick={onClickDeleteBook}> Delete</button>
+                            </>
+                        }
+                        {
+                            openSell &&
+                            <>
+                                <div className={"mb-2"}>
+                                    Price: $ <input className={"ds-sell-input"} type={"number"} value={sellPrice} min={"0"} max={"100"}
+                                                    onChange={(e) => setSellPrice(parseInt(e.target.value))}/>
+                                </div>
+                                <div>
+                                    <button className={"btn btn-danger ms-2"} onClick={onClickSellBook}> Sell</button>
+                                    <button className={"btn btn-danger ms-2"} onClick={() => setOpenSell(false)}> Cancel </button>
+                                </div>
+                            </>
+                        }
+                    </div>
+                </div>)
 
         } else if (type === 'sell') {
             return (
                 <>
+                    {book.name}
                     <span className={'ms-2'}>
                         ${book.sellPrice}
                     </span>
@@ -82,6 +91,7 @@ const BookItem = ({book, type}) => {
         } else if (type === 'search') {
             return (
                 <>
+                    {book.name}
                     {
                         !isInCart(book) &&
                         <>
@@ -106,6 +116,7 @@ const BookItem = ({book, type}) => {
         } else if (type === 'cart') {
             return (
                 <>
+                    {book.name}
                     <span className={'ms-2'}>
                         ${book.sellPrice}
                         <button className={"btn btn-danger ms-2"} onClick={onClickRemoveFromCartBtn}>Remove</button>
@@ -116,8 +127,7 @@ const BookItem = ({book, type}) => {
     }
 
     return (
-        <div>
-            {book.name}
+        <div className={"ds-book p-2"}>
             {typeSpecificDiv()}
         </div>
     )
