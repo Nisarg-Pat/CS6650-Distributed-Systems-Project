@@ -3,9 +3,11 @@ package com.example.cs6650.server.service;
 import com.example.cs6650.server.model.Book;
 import com.example.cs6650.server.model.User;
 import com.example.cs6650.server.repository.BookRepository;
+import com.example.cs6650.server.repository.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +16,9 @@ public class BookService {
 
     @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    private CartRepository cartRepository;
 
     public void addBook(Book book) {
         bookRepository.save(book);
@@ -53,5 +58,23 @@ public class BookService {
 
     public List<Book> searchBook(String name) {
         return bookRepository.findAll().stream().filter((book) -> book.getName().startsWith(name) && book.getStatus().equals("sell")).toList();
+    }
+
+
+    public List<Book> buyBooks(User newUser, List<Book> bookList) {
+        List<Book> buyBooks = new ArrayList<>();
+        for(Book book: bookList) {
+            Book newBook = new Book();
+            newBook.copyFrom(book);
+            book.setStatus("sold");
+            newBook.setUserId(newUser.getId());
+            newBook.setStatus("bought");
+            newBook.setSellPrice(0);
+            cartRepository.delete(cartRepository.getCartByUserIdAndBookId(newUser.getId(), book.getId()).get());
+            bookRepository.save(book);
+            bookRepository.save(newBook);
+            buyBooks.add(newBook);
+        }
+        return buyBooks;
     }
 }

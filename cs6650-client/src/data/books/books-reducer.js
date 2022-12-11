@@ -7,19 +7,22 @@ import {
     sellBookThunk,
     shelfBookThunk
 } from "./books-thunk";
+import {addToCartThunk, buyCartThunk, getCartThunk} from "../carts/carts-thunk";
 
 const booksReducer = createSlice({
         name: 'books',
         initialState: {
             shelfList: [],
             sellList: [],
-            searchList: []
+            searchList: [],
+            cartList: []
         },
         reducers:{
             resetBooks (state, action) {
                 state.shelfList = [];
                 state.sellList = [];
                 state.searchList = [];
+                state.cartList = [];
             }
         },
         extraReducers: {
@@ -43,6 +46,17 @@ const booksReducer = createSlice({
             },
             [searchBookThunk.fulfilled]: (state, action) => {
                 state.searchList = action.payload;
+            },
+
+            [getCartThunk.fulfilled]: (state, action) => {
+                state.cartList = action.payload;
+            },
+            [addToCartThunk.fulfilled]: (state, action) => {
+                state.cartList.push(action.payload);
+            },
+            [buyCartThunk.fulfilled]: (state, action) => {
+                state.cartList = [];
+                state.shelfList.concat(action.payload)
             }
         }
     }

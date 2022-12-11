@@ -7,7 +7,7 @@ import {deleteBookThunk, sellBookThunk, shelfBookThunk} from "../../data/books/b
 const BookItem = ({book, type}) => {
 
     const {currentUser} = useSelector((state) => state.users)
-    const {cartList} = useSelector((state) => state.carts)
+    const {cartList} = useSelector((state) => state.books)
 
     const [openSell, setOpenSell] = useState(false);
     const [sellPrice, setSellPrice] = useState(0);
@@ -101,6 +101,9 @@ const BookItem = ({book, type}) => {
         } else if (type === 'cart') {
             return (
                 <>
+                    <span className={'ms-2'}>
+                        ${book.sellPrice}
+                    </span>
                 </>
             )
         }

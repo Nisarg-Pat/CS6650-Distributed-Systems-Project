@@ -9,7 +9,6 @@ import {getCartThunk} from "../../data/carts/carts-thunk";
 const HomeScreen = () => {
     const {currentUser} = useSelector((state) => state.users)
     const {shelfList, sellList} = useSelector((state) => state.books)
-    const {cartList} = useSelector((state) => state.carts)
     const dispatch = useDispatch()
 
     useEffect(() => {

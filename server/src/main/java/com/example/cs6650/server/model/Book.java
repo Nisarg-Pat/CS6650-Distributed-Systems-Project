@@ -76,4 +76,11 @@ public class Book {
     public void setSellPrice(double sellPrice) {
         this.sellPrice = sellPrice;
     }
+
+    public void copyFrom(Book book) {
+        setName(book.getName());
+        setUserId(book.getUserId());
+        setStatus(book.getStatus());
+        setSellPrice(book.getSellPrice());
+    }
 }

@@ -3,7 +3,6 @@ import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {logoutThunk} from "../../data/users/users-thunks";
 import {resetBooks} from "../../data/books/books-reducer";
-import {resetCarts} from "../../data/carts/carts-reducer";
 
 const NavBar = () => {
     const {currentUser} = useSelector((state) => state.users)
@@ -16,7 +15,6 @@ const NavBar = () => {
     const logoutBtnClick = async () => {
         await dispatch(logoutThunk(currentUser));
         dispatch(resetBooks())
-        dispatch(resetCarts())
         navigate("/home");
     }
 

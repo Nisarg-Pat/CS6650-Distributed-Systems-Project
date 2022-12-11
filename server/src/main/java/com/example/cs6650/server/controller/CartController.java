@@ -2,6 +2,7 @@ package com.example.cs6650.server.controller;
 
 import com.example.cs6650.server.model.Book;
 import com.example.cs6650.server.model.Cart;
+import com.example.cs6650.server.model.CartBody;
 import com.example.cs6650.server.model.User;
 import com.example.cs6650.server.service.BookService;
 import com.example.cs6650.server.service.CartService;
@@ -57,5 +58,24 @@ public class CartController {
         }
         cartService.addCart(cart);
         return new ResponseEntity<>(book.get(), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/buycart")
+    public ResponseEntity<List<Book>> buyCart(@RequestBody CartBody body) {
+        System.out.println(body);
+        Optional<User> user = userService.getUserFromId(body.getNewUser().getId());
+        if(user.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+        List<Book> bookList = new ArrayList<>();
+        for(Book cartbook: body.getBookList()) {
+            Optional<Book> book = bookService.getBook(cartbook.getId());
+            if(book.isEmpty()) {
+                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            }
+            bookList.add(book.get());
+        }
+        List<Book> buyBooks = bookService.buyBooks(user.get(), bookList);
+        return new ResponseEntity<>(buyBooks, HttpStatus.OK);
     }
 }
