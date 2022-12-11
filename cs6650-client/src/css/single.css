@@ -6,3 +6,11 @@
     margin-left: auto;
     margin-right: auto;
 }
+
+.ds-text-white {
+    color: white;
+}
+
+.ds-height-full {
+    height: 100%;
+}

@@ -1,7 +1,10 @@
 body {
     --primary: #000316;
     --secondary: #0D2241;
-    --btn-green: #18A558;
+    --green: #18A558;
+    --dark-green: #0E703A;
+    --red: #522006;
+    --dark-red: #cc0000;
     background: var(--primary);
     color: white;
 }
@@ -23,10 +26,25 @@ input {
 }
 
 .ds-btn-green {
-    background: var(--btn-green);
+    background: var(--green);
+    border: none;
+}
+
+.ds-btn-green:hover {
+    background: var(--dark-green);
+    border: none;
+}
+
+.ds-btn-red {
+    background: var(--red);
+    border: none;
+}
+
+.ds-btn-red:hover {
+    background: var(--dark-red);
     border: none;
 }
 
 .ds-error {
-    color:#cc0000
+    color: var(--red)
 }

@@ -21,12 +21,12 @@ const NavBar = () => {
     return (
         <ul className="nav nav-pills mb-4">
             <li className="nav-item">
-                <Link to="/home" className={`nav-link ${parts[1] === '' || parts[1] === 'home' ? 'active' : ''}`}>
+                <Link to="/home" className={`nav-link ds-text-white ${parts[1] === '' || parts[1] === 'home' ? 'active' : ''}`}>
                     Home
                 </Link>
             </li>
             <li className="nav-item">
-                <Link to="/search" className={`nav-link ${parts[1] === 'search' ? 'active' : ''}`}>
+                <Link to="/search" className={`nav-link ds-text-white ${parts[1] === 'search' ? 'active' : ''}`}>
                     Search Books
                 </Link>
             </li>
@@ -34,12 +34,12 @@ const NavBar = () => {
                 currentUser &&
                 <>
                     <li className="nav-item">
-                        <Link to="/cart" className={`nav-link ${parts[1] === 'cart' ? 'active' : ''}`}>
+                        <Link to="/cart" className={`nav-link ds-text-white ${parts[1] === 'cart' ? 'active' : ''}`}>
                             Cart
                         </Link>
                     </li>
                     <li className="nav-item">
-                        <button className={`btn btn-danger`} onClick={logoutBtnClick}>
+                        <button className={`btn btn-primary ds-btn-red ds-height-full`} onClick={logoutBtnClick}>
                             Logout
                         </button>
                     </li>

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {signupThunk} from "../../data/users/users-thunks";
 import NavBar from "../NavBar";
