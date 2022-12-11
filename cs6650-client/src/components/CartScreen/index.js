@@ -40,7 +40,7 @@ const CartScreen = () => {
                     Total:
                 </h2>
                 <h2 className={"ds-right"}>
-                    ${cartList.reduce((acc, book) => acc + book.sellPrice, 0)} {
+                    ${cartList.filter((book) => book.status === 'sell').reduce((acc, book) => acc + book.sellPrice, 0)} {
                         cartList.length !== 0 &&
                         <button className={"btn ds-btn-green ds-cart-btn me-2"} onClick={buyBtnClickHandler}>Buy</button>}
                 </h2>

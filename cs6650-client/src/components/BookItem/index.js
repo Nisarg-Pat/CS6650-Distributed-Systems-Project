@@ -134,9 +134,18 @@ const BookItem = ({book, type}) => {
                     <h2 className={"ds-left mb-0"}>
                         {book.name}
                     </h2>
-                    <h2 className={'ds-right mb-0'}>
-                        ${book.sellPrice} <button className={"btn btn-danger ds-cart-btn"} onClick={onClickRemoveFromCartBtn}>Remove</button>
-                    </h2>
+                    {
+                        book.status === 'sell' &&
+                        <h2 className={'ds-right mb-0'}>
+                            ${book.sellPrice} <button className={"btn btn-danger ds-cart-btn"} onClick={onClickRemoveFromCartBtn}>Remove</button>
+                        </h2>
+                    }
+                    {
+                        book.status !== 'sell' &&
+                        <h2 className={'ds-right mb-0'}>
+                            No Longer Available <button className={"btn btn-danger ds-cart-btn"} onClick={onClickRemoveFromCartBtn}>Remove</button>
+                        </h2>
+                    }
                     <div className={"ds-clear"}/>
                 </div>
             )

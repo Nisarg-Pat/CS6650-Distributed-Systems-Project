@@ -84,6 +84,8 @@ public class CartController {
             Optional<Book> book = bookService.getBook(cartbook.getId());
             if(book.isEmpty()) {
                 return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            } else if (!book.get().getStatus().equals("sell")) {
+                return new ResponseEntity<>(null, HttpStatus.CONFLICT);
             }
             bookList.add(book.get());
         }

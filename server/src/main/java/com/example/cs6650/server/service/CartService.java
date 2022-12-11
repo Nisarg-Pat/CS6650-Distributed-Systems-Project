@@ -30,6 +30,10 @@ public class CartService {
         cartRepository.delete(cart);
     }
 
+    public void removeAll(Integer bookId) {
+        cartRepository.deleteAllByBookId(bookId);
+    }
+
     public Optional<Cart> getCart(Cart cart) {
         return cartRepository.getCartByUserIdAndBookId(cart.getUserId(), cart.getBookId());
     }
