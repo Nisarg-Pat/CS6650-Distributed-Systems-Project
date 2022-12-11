@@ -1,5 +1,6 @@
 package com.example.cs6650.server.coordinator;
 
+import org.apache.el.stream.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
@@ -7,7 +8,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -28,4 +28,12 @@ public class CoordinatorService {
         int random = new Random().nextInt(0, serverList.size());
         return serverList.get(random);
     }
+
+    public List<Server> serverList() {
+        return serverRepository.findAll();
+    }
+
+//    public Optional<Server> removeServer(Server server) {
+//        return serverRepository.deleteServerByHostAndPort(server.getHost(), server.getPort());
+//    }
 }

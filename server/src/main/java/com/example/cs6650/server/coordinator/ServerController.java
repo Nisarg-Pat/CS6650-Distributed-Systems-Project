@@ -52,12 +52,13 @@ public class ServerController {
         System.out.println("Server:"+server);
         Server servero = coordinatorService.addServer(server);
         ServerData serverData = new ServerData(userService.allUsers(), cartService.allCarts(), bookService.allBooks());
-        restService.sendData(server.getHost(), server.getPort(), serverData);
+        Object response = restService.post(restService.generateURL(server.getHost(), server.getPort(), "serverdata"), serverData);
         return new ResponseEntity<>(servero, HttpStatus.CREATED);
     }
 
     @PostMapping("/serverdata")
     public ResponseEntity<Object> makeData(@RequestBody ServerData serverData) {
+        System.out.println(serverData);
         userRepository.saveAll(serverData.getUsers());
         bookRepository.saveAll(serverData.getBooks());
         cartRepository.saveAll(serverData.getCarts());

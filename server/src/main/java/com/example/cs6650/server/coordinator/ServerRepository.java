@@ -8,4 +8,6 @@ import java.util.Optional;
 @Repository
 public interface ServerRepository extends JpaRepository<Server, Integer> {
     Optional<Server> getServerByHostAndPort(String host, int port);
+
+    Optional<Server> deleteServerByHostAndPort(String host, int port);
 }
