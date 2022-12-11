@@ -3,12 +3,13 @@ import {useDispatch, useSelector} from "react-redux";
 import {loginThunk} from "../../data/users/users-thunks";
 import NavBar from "../NavBar";
 import {Navigate} from "react-router-dom";
+import {setError} from "../../data/users/users-reducer";
 
 const LoginScreen = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
-    const {currentUser} = useSelector((state) => state.users)
+    const {currentUser, error} = useSelector((state) => state.users)
 
     const dispatch = useDispatch();
 
@@ -24,22 +25,37 @@ const LoginScreen = () => {
             }
             <NavBar/>
             <div className={"ds-text-center"}>
-                <label>
-                    Username:
-                    <input value={username} onChange={(e) => setUsername(e.target.value)}/>
-                </label>
-                <br/>
-                <label>
-                    Password:
-                    <input value={password} onChange={(e) => setPassword(e.target.value)}/>
-                </label>
-                <br/>
-                <button className={"btn btn-secondary"} onClick={onLoginBtnClick}>Login</button>
+                <h2>
+                    Login
+                </h2>
+                <table className={"ds-table ds-center"}>
+                    <tbody>
+                        <tr>
+                            <td>Username:</td>
+                            <td><input value={username} onChange={(e) => {
+                                dispatch(setError(null));
+                                setUsername(e.target.value)
+                            }}/></td>
+                        </tr>
+                        <tr>
+                            <td>Password:</td>
+                            <td><input value={password} onChange={(e) => {
+                                dispatch(setError(null));
+                                setPassword(e.target.value)
+                            }}/></td>
+                        </tr>
+                        <tr>
+                            <td colSpan={2}><button className={"btn btn-primary ds-btn-green"} onClick={onLoginBtnClick}>Login</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+                {
+                    error &&
+                    <span className={"ds-error"}>{error}</span>
+                }
             </div>
         </div>
     )
-
-
 }
 
 export default LoginScreen;

@@ -1,0 +1,32 @@
+body {
+    --primary: #000316;
+    --secondary: #0D2241;
+    --btn-green: #18A558;
+    background: var(--primary);
+    color: white;
+}
+
+input {
+    color: white;
+    background: var(--primary);
+    border: 1px solid grey;
+    border-radius: 5px;
+}
+
+.ds-table {
+    background: var(--secondary);
+    border-radius: 16px;
+}
+
+.ds-table > tbody > tr > td {
+    padding: 16px;
+}
+
+.ds-btn-green {
+    background: var(--btn-green);
+    border: none;
+}
+
+.ds-error {
+    color:#cc0000
+}

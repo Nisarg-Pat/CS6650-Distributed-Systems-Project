@@ -33,13 +33,12 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<Object> createUser(@RequestBody User user) {
         System.out.println("In Create User:"+user);
         if(userService.getUserFromUsername(user.getUsername()).isPresent()) {
-            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+            return new ResponseEntity<>("Username Already present", HttpStatus.CONFLICT);
         }
         userService.createUser(user);
-
         return new ResponseEntity<>(userService.getUserFromUsername(user.getUsername()).get(), HttpStatus.CREATED);
     }
 
@@ -48,7 +47,7 @@ public class UserController {
     public ResponseEntity<User> loginUser(@RequestBody User user) {
         Optional<User> getUser = userService.getUserFromUsernamePassword(user.getUsername(), user.getPassword());
         if(getUser.isEmpty()) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
         return new ResponseEntity<>(getUser.get(), HttpStatus.OK);
     }
