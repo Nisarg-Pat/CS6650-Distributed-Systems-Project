@@ -31,11 +31,22 @@ const booksReducer = createSlice({
             },
             [bookListThunk.fulfilled]: (state, action) => {
                 state.shelfList = action.payload.filter((book) => book.status === "shelf" || book.status === "bought")
-                state.sellList = action.payload.filter((book) => book.status === "sell" || book.status === "sold")
+                const temp = action.payload.filter((book) => book.status === "sell" || book.status === "sold")
+                temp.sort((a,b) => {
+                        if (a.status !== b.status) {
+                            if(a.status === "sold") {
+                                return 1;
+                            }
+                            return -1;
+                        }
+                        return 0;
+                    });
+                console.log(temp)
+                state.sellList = temp;
             },
             [sellBookThunk.fulfilled]: (state, action) => {
                 state.shelfList = state.shelfList.filter((book) => book.id !== action.payload.id)
-                state.sellList.push(action.payload)
+                state.sellList.unshift(action.payload)
             },
             [shelfBookThunk.fulfilled]: (state, action) => {
                 state.sellList = state.sellList.filter((book) => book.id !== action.payload.id)

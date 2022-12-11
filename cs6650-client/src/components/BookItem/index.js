@@ -88,9 +88,18 @@ const BookItem = ({book, type}) => {
                     <div className={'mb-2'}>
                         Price: ${book.sellPrice}
                     </div>
-                    <div>
-                        <button className={"btn btn-danger"} onClick={onClickShelfBook}> Back to Shelf</button>
-                    </div>
+                    {
+                        book.status === 'sold' &&
+                        <div>
+                            <button className={"btn btn-outline-danger disabled"} onClick={onClickShelfBook}> Sold</button>
+                        </div>
+                    }
+                    {
+                        book.status === 'sell' &&
+                        <div>
+                            <button className={"btn btn-danger"} onClick={onClickShelfBook}> Back to Shelf</button>
+                        </div>
+                    }
 
                 </div>)
         } else if (type === 'search') {
