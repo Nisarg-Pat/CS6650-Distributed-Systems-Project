@@ -37,7 +37,6 @@ function App() {
                 </Routes>
             </BrowserRouter>
         </Provider>
-
     </div>
   );
 }

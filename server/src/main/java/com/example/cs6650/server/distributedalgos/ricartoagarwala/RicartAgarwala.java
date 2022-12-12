@@ -3,6 +3,9 @@ package com.example.cs6650.server.distributedalgos.ricartoagarwala;
 import com.example.cs6650.server.common.Log;
 import com.example.cs6650.server.coordinator.RestService;
 import com.example.cs6650.server.coordinator.Server;
+import com.example.cs6650.server.distributedalgos.vectorclock.TimeStamp;
+import com.example.cs6650.server.distributedalgos.vectorclock.TimeStampRepository;
+import com.example.cs6650.server.distributedalgos.vectorclock.TimeStampService;
 import com.example.cs6650.server.model.MyServer;
 import com.example.cs6650.server.repository.MyServerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,9 @@ public class RicartAgarwala {
     @Autowired
     RestService restService;
 
+    @Autowired
+    TimeStampService timeStampService;
+
     Queue<Server> serverQueue = new LinkedList<>();
 
     public void enterSection() {
@@ -45,17 +51,17 @@ public class RicartAgarwala {
             servers.add(server);
         }
 
-        long timestamp = Long.parseLong(System.currentTimeMillis()+""+myserver.getPort());
+        TimeStamp timestamp = timeStampService.getMyTimeStamp();
         State state = stateRepository.getStateById(1);
         state.setState(State.WANTED);
-        state.setTimestamp(timestamp);
+        state.setTimestamp(timestamp.getTime(myserver.getPort()));
         state.setServerCount(servers.size());
         stateRepository.save(state);
 
         Server servero = new Server();
         servero.setHost(myserver.getHost());
         servero.setPort(myserver.getPort());
-        servero.setRaTimestamp(timestamp);
+        servero.setRaTimestamp(timestamp.getTime(myserver.getPort()));
 
         for(Server server: servers) {
             ResponseEntity<Object> response = restService.post(restService.generateURL(server.getHost(), server.getPort(), "rarequest"), servero);
