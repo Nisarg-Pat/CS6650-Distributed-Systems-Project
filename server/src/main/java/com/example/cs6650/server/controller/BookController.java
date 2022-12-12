@@ -6,6 +6,7 @@ import com.example.cs6650.server.controller.command.SellBookCommand;
 import com.example.cs6650.server.controller.command.SignupCommand;
 import com.example.cs6650.server.coordinator.RestService;
 import com.example.cs6650.server.distributedalgos.paxos.PaxosController;
+import com.example.cs6650.server.distributedalgos.ricartoagarwala.RicartAgarwala;
 import com.example.cs6650.server.distributedalgos.twophasecommit.Transaction;
 import com.example.cs6650.server.model.Book;
 import com.example.cs6650.server.model.User;
@@ -24,7 +25,7 @@ import java.util.Optional;
 @Controller
 @CrossOrigin(origins = {"http://localhost:3000"})
 @RequestMapping("/book")
-public class BookController extends PaxosController {
+public class BookController extends RicartAgarwala {
 
     @Autowired
     private UserService userService;
@@ -52,7 +53,10 @@ public class BookController extends PaxosController {
 
     @PostMapping("/booklist")
     public ResponseEntity<List<Book>> getBookListOfUser(@RequestBody User user) {
-        return new ResponseEntity<>(bookService.getListOfBooks(user), HttpStatus.OK);
+        enterSection();
+        List<Book> bookList = bookService.getListOfBooks(user);
+        exitSection();
+        return new ResponseEntity<>(bookList, HttpStatus.OK);
     }
 
     @PostMapping("/sell")

@@ -6,6 +6,7 @@ import com.example.cs6650.server.controller.command.LogoutCommand;
 import com.example.cs6650.server.controller.command.SignupCommand;
 import com.example.cs6650.server.coordinator.RestService;
 import com.example.cs6650.server.coordinator.Server;
+import com.example.cs6650.server.distributedalgos.ricartoagarwala.RicartAgarwala;
 import com.example.cs6650.server.model.User;
 import com.example.cs6650.server.service.BookService;
 import com.example.cs6650.server.service.CartService;
@@ -22,7 +23,7 @@ import java.rmi.RemoteException;
 import java.util.*;
 
 @Controller
-public class TwoPhaseCommitController {
+public class TwoPhaseCommitController{
     private Transaction currentTransaction = null;
     private ResponseEntity<Object> result = null;
     private Thread waitForTransactionResponse = null;

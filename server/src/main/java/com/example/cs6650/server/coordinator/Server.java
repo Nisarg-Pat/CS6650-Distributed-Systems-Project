@@ -11,6 +11,7 @@ public class Server {
 
     private String host;
     private int port;
+    private long raTimestamp;
 
     public Server(String host, int port) {
         this.host = host;
@@ -52,5 +53,13 @@ public class Server {
                 ", host='" + host + '\'' +
                 ", port=" + port +
                 '}';
+    }
+
+    public long getRaTimestamp() {
+        return raTimestamp;
+    }
+
+    public void setRaTimestamp(long raTimestamp) {
+        this.raTimestamp = raTimestamp;
     }
 }

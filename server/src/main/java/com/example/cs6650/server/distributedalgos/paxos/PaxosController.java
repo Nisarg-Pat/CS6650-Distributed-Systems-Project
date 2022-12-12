@@ -3,8 +3,10 @@ package com.example.cs6650.server.distributedalgos.paxos;
 import com.example.cs6650.server.controller.command.Command;
 import com.example.cs6650.server.coordinator.RestService;
 import com.example.cs6650.server.coordinator.Server;
+import com.example.cs6650.server.distributedalgos.ricartoagarwala.RicartAgarwala;
 import com.example.cs6650.server.distributedalgos.twophasecommit.Transaction;
 import com.example.cs6650.server.distributedalgos.twophasecommit.TransactionExecutor;
+import com.example.cs6650.server.distributedalgos.twophasecommit.TwoPhaseCommitController;
 import com.example.cs6650.server.repository.MyServerRepository;
 import com.example.cs6650.server.service.BookService;
 import com.example.cs6650.server.service.CartService;
@@ -23,7 +25,7 @@ import java.util.List;
 import java.util.concurrent.*;
 
 @Controller
-public class PaxosController {
+public class PaxosController{
     
     @Autowired
     MyServerRepository myServer;
