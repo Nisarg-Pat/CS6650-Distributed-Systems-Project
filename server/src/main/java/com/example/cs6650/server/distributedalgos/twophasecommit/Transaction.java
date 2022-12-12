@@ -11,18 +11,15 @@ public class Transaction implements Serializable {
 
     private final long id;
     private final Command command;
-    private final String serviceType;
 
-    public Transaction(long id, Command command, String serviceType) {
+    public Transaction(long id, Command command) {
         this.id = id;
         this.command = command;
-        this.serviceType = serviceType;
     }
 
     public Transaction(Transaction other) {
         this.id = other.getId();
         this.command = other.getCommand();
-        this.serviceType = other.getServiceType();
     }
 
     public long getId() {
@@ -31,9 +28,5 @@ public class Transaction implements Serializable {
 
     public Command getCommand() {
         return command;
-    }
-
-    public String getServiceType() {
-        return serviceType;
     }
 }

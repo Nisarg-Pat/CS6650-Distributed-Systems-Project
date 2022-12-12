@@ -1,9 +1,6 @@
 package com.example.cs6650.server.controller;
 
-import com.example.cs6650.server.controller.command.AddBookCommand;
-import com.example.cs6650.server.controller.command.Command;
-import com.example.cs6650.server.controller.command.SellBookCommand;
-import com.example.cs6650.server.controller.command.SignupCommand;
+import com.example.cs6650.server.controller.command.*;
 import com.example.cs6650.server.coordinator.RestService;
 import com.example.cs6650.server.distributedalgos.paxos.PaxosController;
 import com.example.cs6650.server.distributedalgos.ricartoagarwala.RicartAgarwala;
@@ -44,10 +41,10 @@ public class BookController extends RicartAgarwala {
         System.out.println("In Add Book:"+book);
         Optional<User> user = userService.getUserFromId(book.getUserId());
         if(user.isEmpty()) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
         }
         Command command = new AddBookCommand(book);
-        Transaction transaction = new Transaction(Long.parseLong(System.currentTimeMillis()+""+myServer.getMyServerById(1).getPort()), command, "bookService");
+        Transaction transaction = new Transaction(Long.parseLong(System.currentTimeMillis()+""+myServer.getMyServerById(1).getPort()), command);
         return restService.post(restService.generateURL("localhost", 8080, "propose"), transaction);
     }
 
@@ -64,45 +61,50 @@ public class BookController extends RicartAgarwala {
         System.out.println("In Sell Book:"+book);
         Optional<User> user = userService.getUserFromId(book.getUserId());
         if(user.isEmpty()) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
         }
         Command command = new SellBookCommand(book);
-        Transaction transaction = new Transaction(Long.parseLong(System.currentTimeMillis()+""+myServer.getMyServerById(1).getPort()), command, "userService");
+        Transaction transaction = new Transaction(Long.parseLong(System.currentTimeMillis()+""+myServer.getMyServerById(1).getPort()), command);
         return restService.post(restService.generateURL("localhost", 8080, "propose"), transaction);
     }
 
     @PostMapping("/shelf")
-    public ResponseEntity<Book> shelfBook(@RequestBody Book book) {
+    public ResponseEntity<Object> shelfBook(@RequestBody Book book) {
         System.out.println("In Shelf Book:"+book);
         Optional<User> user = userService.getUserFromId(book.getUserId());
         if(user.isEmpty()) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
         }
-        bookService.shelfBook(book);
-        return new ResponseEntity<>(bookService.getBook(book.getId()).get(), HttpStatus.OK);
+        Command command = new ShelfBookCommand(book);
+        Transaction transaction = new Transaction(Long.parseLong(System.currentTimeMillis()+""+myServer.getMyServerById(1).getPort()), command);
+        return restService.post(restService.generateURL("localhost", 8080, "propose"), transaction);
     }
 
     @PostMapping("/delete")
-    public ResponseEntity<Integer> deleteBook(@RequestBody Book book) {
+    public ResponseEntity<Object> deleteBook(@RequestBody Book book) {
         System.out.println("In Delete Book:"+book);
         Optional<User> user = userService.getUserFromId(book.getUserId());
         if(user.isEmpty()) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(Integer.MIN_VALUE, HttpStatus.BAD_REQUEST);
         }
-        int id = book.getId();
-        bookService.deleteBook(book);
-        return new ResponseEntity<>(id, HttpStatus.OK);
+        Command command = new DeleteBookCommand(book);
+        Transaction transaction = new Transaction(Long.parseLong(System.currentTimeMillis()+""+myServer.getMyServerById(1).getPort()), command);
+        return restService.post(restService.generateURL("localhost", 8080, "propose"), transaction);
     }
 
     @GetMapping("/search/{name}")
     public ResponseEntity<List<Book>> searchBook(@PathVariable("name") String name) {
+        enterSection();
         List<Book> list = bookService.searchBook(name);
+        exitSection();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @GetMapping("/search/")
     public ResponseEntity<List<Book>> searchBook() {
+        enterSection();
         List<Book> list = bookService.searchBook("");
+        exitSection();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }

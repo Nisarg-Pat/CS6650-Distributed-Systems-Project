@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -89,7 +90,11 @@ public class TwoPhaseCommitController{
                         //doCommit
                         startCommit = true;
                         for(Server server: canCommitList) {
-                            result = restService.post(restService.generateURL(server.getHost(), server.getPort(), "docommit"), transaction);
+                            try {
+                                result = restService.post(restService.generateURL(server.getHost(), server.getPort(), "docommit"), transaction);
+                            } catch (HttpClientErrorException e) {
+                                result = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
+                            }
                         }
                     } else {
                         //doAbort

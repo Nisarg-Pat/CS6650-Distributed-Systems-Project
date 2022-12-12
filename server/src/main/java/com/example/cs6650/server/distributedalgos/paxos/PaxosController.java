@@ -45,7 +45,7 @@ public class PaxosController{
     @Autowired
     PaxosRepository paxosRepository;
 
-    private static final double FAILURE_CHANCE = 0.2;
+    private static final double FAILURE_CHANCE = 0.1;
     private static final int EXECUTOR_TIMEOUT = 10000; //10000 ms = 10 sec
 
     @PostMapping("/propose")
@@ -74,7 +74,7 @@ public class PaxosController{
                 Transaction acceptedTransaction = promise.getTransaction();
                 if (acceptedTransaction != null && acceptedTransaction.getId() > maxTransactionNumber) {
                     maxTransactionNumber = acceptedTransaction.getId();
-                    currentTransaction = new Transaction(transaction.getId(), acceptedTransaction.getCommand(), acceptedTransaction.getServiceType());
+                    currentTransaction = new Transaction(transaction.getId(), acceptedTransaction.getCommand());
                 }
             }
         }
@@ -107,11 +107,11 @@ public class PaxosController{
     public ResponseEntity<Object> prepare(@RequestBody Transaction transaction) {
         System.out.println("In Prepare");
 
-        //Implementing random failure of the server with a probability of 0.1
-//        if (Math.random() <= FAILURE_CHANCE) {
-//            System.out.println("Got Preparation request for " + transaction + ": Failing Server");
-//            return null;
-//        }
+//        Implementing random failure of the server with a probability of 0.1
+        if (Math.random() <= FAILURE_CHANCE) {
+            System.out.println("Got Preparation request for " + transaction + ": Failing Server");
+            return new ResponseEntity<>(new Promise(false, null), HttpStatus.OK);
+        }
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         FutureTask<ResponseEntity<Object>> futureTask = new FutureTask<>(new Callable<ResponseEntity<Object>>() {
@@ -142,11 +142,11 @@ public class PaxosController{
     @PostMapping("/accept")
     public ResponseEntity<Object> accept(@RequestBody Transaction transaction) throws RemoteException {
 
-        //Implementing random failure of the server with a probability of 0.1
-//        if (Math.random() <= FAILURE_CHANCE) {
-//            System.out.println("Got Preparation request for " + transaction + ": Failing Server");
-//            return null;
-//        }
+//        Implementing random failure of the server with a probability of 0.1
+        if (Math.random() <= FAILURE_CHANCE) {
+            System.out.println("Got Preparation request for " + transaction + ": Failing Server");
+            return new ResponseEntity<>(new Promise(false, null), HttpStatus.OK);
+        }
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         FutureTask<ResponseEntity<Object>> futureTask = new FutureTask<>((Callable<ResponseEntity<Object>>) () -> {
@@ -175,7 +175,6 @@ public class PaxosController{
     // Implementation of paxos learning
     @PostMapping("/learn")
     public ResponseEntity<Object> learn(@RequestBody Transaction transaction){
-//        Command command = transaction.getCommand();
         System.out.println("Got Learn request for " + transaction + ": Learned");
         resetPaxos();
         return TransactionExecutor.execute(transaction, userService, bookService, cartService);
