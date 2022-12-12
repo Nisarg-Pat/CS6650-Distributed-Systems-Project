@@ -53,7 +53,9 @@ public class BookController extends RicartAgarwala {
 
     @PostMapping("/booklist")
     public ResponseEntity<List<Book>> getBookListOfUser(@RequestBody User user) {
+        enterSection();
         List<Book> bookList = bookService.getListOfBooks(user);
+        exitSection();
         return new ResponseEntity<>(bookList, HttpStatus.OK);
     }
 

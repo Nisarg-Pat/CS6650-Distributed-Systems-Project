@@ -59,15 +59,8 @@ public class RicartAgarwala {
         for(Server server: servers) {
             ResponseEntity<Object> response = restService.post(restService.generateURL(server.getHost(), server.getPort(), "rarequest"), servero);
         }
-        while(!state.getState().equals(State.HELD)) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            state = stateRepository.getStateById(1);
-            System.out.println(state.getState());
-        }
+        state.setState(State.HELD);
+        stateRepository.save(state);
     }
 
 
