@@ -2,6 +2,7 @@ package com.example.cs6650.server.distributedalgos.ricartoagarwala;
 
 import com.example.cs6650.server.coordinator.RestService;
 import com.example.cs6650.server.coordinator.Server;
+import com.example.cs6650.server.model.MyServer;
 import com.example.cs6650.server.repository.MyServerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ public class RicartAgarwala {
     StateRepository stateRepository;
 
     @Autowired
-    MyServerRepository myServer;
+    MyServerRepository myServerRepository;
 
     @Autowired
     RestService restService;
@@ -31,26 +32,32 @@ public class RicartAgarwala {
     public void enterSection() {
         System.out.println("Enter Section");
 
+        MyServer myserver = myServerRepository.getMyServerById(1);
+
         List<LinkedHashMap<String, Object>> serverList = (List<LinkedHashMap<String, Object>>) restService.post(restService.generateURL("localhost", 8080, "allservers"), null).getBody();
         List<Server> servers = new ArrayList<>();
         for (LinkedHashMap<String, Object> serverL: serverList) {
             Server server = new Server((String) serverL.get("host"), (Integer)serverL.get("port"));
-            if(server.getHost().equals(myServer.getMyServerById(1).getHost())&&server.getPort()==myServer.getMyServerById(1).getPort()) {
+            if(server.getHost().equals(myserver.getHost())&&server.getPort()==myserver.getPort()) {
                 continue;
             }
             servers.add(server);
         }
 
-        long timestamp = Long.parseLong(System.currentTimeMillis()+""+myServer.getMyServerById(1).getPort());
+        long timestamp = Long.parseLong(System.currentTimeMillis()+""+myserver.getPort());
         State state = stateRepository.getStateById(1);
         state.setState(State.WANTED);
         state.setTimestamp(timestamp);
         state.setServerCount(servers.size());
         stateRepository.save(state);
 
+        Server servero = new Server();
+        servero.setHost(myserver.getHost());
+        servero.setPort(myserver.getPort());
+        servero.setRaTimestamp(timestamp);
+
         for(Server server: servers) {
-            server.setRaTimestamp(timestamp);
-            ResponseEntity<Object> response = restService.post(restService.generateURL(server.getHost(), server.getPort(), "rarequest"), server);
+            ResponseEntity<Object> response = restService.post(restService.generateURL(server.getHost(), server.getPort(), "rarequest"), servero);
         }
         while(!state.getState().equals(State.HELD)) {
             try {
@@ -59,6 +66,7 @@ public class RicartAgarwala {
                 throw new RuntimeException(e);
             }
             state = stateRepository.getStateById(1);
+            System.out.println(state.getState());
         }
     }
 
@@ -91,11 +99,13 @@ public class RicartAgarwala {
         System.out.println("RA Response");
         State state = stateRepository.getStateById(1);
         state.setResponseCount(state.getResponseCount()+1);
+        System.out.println(state.getServerCount() + " "+state.getResponseCount());
         if(state.getResponseCount() == state.getServerCount()) {
+            System.out.println("Setting state to held");
             state.setState(State.HELD);
-
         }
         stateRepository.save(state);
+
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
 }
