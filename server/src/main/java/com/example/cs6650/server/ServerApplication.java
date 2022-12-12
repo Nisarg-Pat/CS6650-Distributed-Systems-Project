@@ -1,8 +1,10 @@
 package com.example.cs6650.server;
 
 import com.example.cs6650.server.model.Book;
+import com.example.cs6650.server.model.MyServer;
 import com.example.cs6650.server.model.User;
 import com.example.cs6650.server.repository.BookRepository;
+import com.example.cs6650.server.repository.MyServerRepository;
 import com.example.cs6650.server.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -27,7 +29,7 @@ public class ServerApplication {
 	}
 
     @Bean
-    public CommandLineRunner run(UserRepository userRepository, BookRepository bookRepository) throws Exception {
+    public CommandLineRunner run(UserRepository userRepository, BookRepository bookRepository, MyServerRepository myServerRepository) throws Exception {
         return (String[] args) -> {
             if(args.length ==1 && args[0].equals("--ds-coordinator")) {
                 User user = new User("qq","qq","qq","qq");
@@ -62,6 +64,11 @@ public class ServerApplication {
                 bookRepository.save(book);
                 book = new Book("c4", 3, "sell", 41);
                 bookRepository.save(book);
+
+                MyServer myServer = new MyServer("localhost", 8080);
+                System.out.println(myServer);
+                myServerRepository.save(myServer);
+
             } else if(args.length == 2) {
                 String host = args[0];
                 String portString = args[1].split("=")[1];
@@ -90,6 +97,8 @@ public class ServerApplication {
                     }
                     System.out.println(response.toString());
                 }
+
+                myServerRepository.save(new MyServer(host, port));
             }
         };
     }

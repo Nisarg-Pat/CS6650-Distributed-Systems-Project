@@ -2,11 +2,18 @@ package com.example.cs6650.server.controller;
 
 
 import com.example.cs6650.server.common.ApiResponse;
+import com.example.cs6650.server.controller.command.Command;
+import com.example.cs6650.server.controller.command.LoginCommand;
+import com.example.cs6650.server.controller.command.LogoutCommand;
+import com.example.cs6650.server.controller.command.SignupCommand;
+import com.example.cs6650.server.distributedalgos.twophasecommit.Transaction;
 import com.example.cs6650.server.model.User;
+import com.example.cs6650.server.repository.MyServerRepository;
 import com.example.cs6650.server.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +28,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private MyServerRepository myServer;
+
     @GetMapping("/hello")
     public ResponseEntity<String> hello() {
         return new ResponseEntity<>("Hello World", HttpStatus.OK);
@@ -34,30 +44,23 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<Object> createUser(@RequestBody User user) {
-        System.out.println("In Create User:"+user);
-        if(userService.getUserFromUsername(user.getUsername()).isPresent()) {
-            return new ResponseEntity<>("Username Already present", HttpStatus.CONFLICT);
-        }
-        userService.createUser(user);
-        return new ResponseEntity<>(userService.getUserFromUsername(user.getUsername()).get(), HttpStatus.CREATED);
+        Command command = new SignupCommand(user);
+        Transaction transaction = new Transaction(Long.parseLong(""+myServer.getMyServerById(1).getPort()+""+System.currentTimeMillis()), command);
+        return transaction.execute(userService);
     }
 
 
     @PostMapping("/login")
-    public ResponseEntity<User> loginUser(@RequestBody User user) {
-        Optional<User> getUser = userService.getUserFromUsernamePassword(user.getUsername(), user.getPassword());
-        if(getUser.isEmpty()) {
-            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
-        }
-        return new ResponseEntity<>(getUser.get(), HttpStatus.OK);
+    public ResponseEntity<Object> loginUser(@RequestBody User user) {
+        Command command = new LoginCommand(user);
+        Transaction transaction = new Transaction(Long.parseLong(""+myServer.getMyServerById(1).getPort()+""+System.currentTimeMillis()), command);
+        return transaction.execute(userService);
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<User> logout(@RequestBody User user) {
-        Optional<User> getUser = userService.getUserFromUsernamePassword(user.getUsername(), user.getPassword());
-        if(getUser.isEmpty()) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(getUser.get(), HttpStatus.OK);
+    public ResponseEntity<Object> logout(@RequestBody User user) {
+        Command command = new LogoutCommand(user);
+        Transaction transaction = new Transaction(Long.parseLong(""+myServer.getMyServerById(1).getPort()+""+System.currentTimeMillis()), command);
+        return transaction.execute(userService);
     }
 }
