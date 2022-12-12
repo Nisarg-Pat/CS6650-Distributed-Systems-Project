@@ -11,10 +11,12 @@ public class MyServer {
 
     private String host;
     private int port;
+    private int globalIndex;
 
-    public MyServer(String host, int port) {
+    public MyServer(String host, int port, int globalIndex) {
         this.host = host;
         this.port = port;
+        this.globalIndex = globalIndex;
     }
 
     public MyServer() {
@@ -52,5 +54,13 @@ public class MyServer {
                 ", host='" + host + '\'' +
                 ", port=" + port +
                 '}';
+    }
+
+    public int getGlobalIndex() {
+        return globalIndex;
+    }
+
+    public void setGlobalIndex(int globalIndex) {
+        this.globalIndex = globalIndex;
     }
 }

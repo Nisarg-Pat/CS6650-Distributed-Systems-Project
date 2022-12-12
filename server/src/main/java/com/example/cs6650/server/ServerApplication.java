@@ -5,6 +5,8 @@ import com.example.cs6650.server.distributedalgos.paxos.Paxos;
 import com.example.cs6650.server.distributedalgos.paxos.PaxosRepository;
 import com.example.cs6650.server.distributedalgos.ricartoagarwala.State;
 import com.example.cs6650.server.distributedalgos.ricartoagarwala.StateRepository;
+import com.example.cs6650.server.distributedalgos.vectorclock.TimeStamp;
+import com.example.cs6650.server.distributedalgos.vectorclock.TimeStampRepository;
 import com.example.cs6650.server.model.Book;
 import com.example.cs6650.server.model.MyServer;
 import com.example.cs6650.server.model.User;
@@ -34,10 +36,11 @@ public class ServerApplication {
 	}
 
     @Bean
-    public CommandLineRunner run(UserRepository userRepository, BookRepository bookRepository, MyServerRepository myServerRepository, PaxosRepository paxosRepository, StateRepository stateRepository) throws Exception {
+    public CommandLineRunner run(UserRepository userRepository, BookRepository bookRepository, MyServerRepository myServerRepository, PaxosRepository paxosRepository, StateRepository stateRepository, TimeStampRepository timeStampRepository) throws Exception {
         return (String[] args) -> {
             String host="localhost";
             int port=8080;
+            int index = -1;
             if(args.length ==1 && args[0].equals("--ds-coordinator")) {
                 User user = new User("qq","qq","qq","qq");
                 userRepository.save(user);
@@ -103,10 +106,18 @@ public class ServerApplication {
                     response.append(responseLine.trim());
                 }
                 Log.logln(response.toString());
+                String[] ss = response.toString().split("id:");
+                for(int i=0;i<ss.length;i++) {
+                    Log.logln(ss[i]);
+                }
             }
 
-            myServerRepository.save(new MyServer(host, port));
+            myServerRepository.save(new MyServer(host, port, 0));
             paxosRepository.save(new Paxos(0, null));
+            for(int i=0;i<100;i++) {
+                TimeStamp timeStamp = new TimeStamp( 0);
+                timeStampRepository.save(timeStamp);
+            }
 
             State state = new State();
             state.setState(State.RELEASED);

@@ -70,6 +70,6 @@ public class ServerController {
         bookRepository.saveAll(serverData.getBooks());
         cartRepository.saveAll(serverData.getCarts());
         Log.logln("State Copied");
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        return new ResponseEntity<>(false, HttpStatus.OK);
     }
 }
