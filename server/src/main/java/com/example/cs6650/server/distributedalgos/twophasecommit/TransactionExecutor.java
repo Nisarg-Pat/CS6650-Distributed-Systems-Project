@@ -1,9 +1,6 @@
 package com.example.cs6650.server.distributedalgos.twophasecommit;
 
-import com.example.cs6650.server.controller.command.AddBookCommand;
-import com.example.cs6650.server.controller.command.LoginCommand;
-import com.example.cs6650.server.controller.command.LogoutCommand;
-import com.example.cs6650.server.controller.command.SignupCommand;
+import com.example.cs6650.server.controller.command.*;
 import com.example.cs6650.server.service.BookService;
 import com.example.cs6650.server.service.CartService;
 import com.example.cs6650.server.service.UserService;
@@ -25,6 +22,27 @@ public class TransactionExecutor {
         }
         if(transaction.getCommand().getType().equals("addBook")) {
             return new AddBookCommand(transaction.getCommand().getBook()).execute(bookService);
+        }
+        if(transaction.getCommand().getType().equals("sellBook")) {
+            return new SellBookCommand(transaction.getCommand().getBook()).execute(bookService);
+        }
+        if(transaction.getCommand().getType().equals("deleteBook")) {
+            return new DeleteBookCommand(transaction.getCommand().getBook()).execute(bookService);
+        }
+        if(transaction.getCommand().getType().equals("shelfBook")) {
+            return new ShelfBookCommand(transaction.getCommand().getBook()).execute(bookService);
+        }
+        if(transaction.getCommand().getType().equals("addToCart")) {
+            return new AddToCartCommand(transaction.getCommand().getCart()).execute(userService, bookService, cartService);
+        }
+        if(transaction.getCommand().getType().equals("buyCart")) {
+            return new BuyCart(transaction.getCommand().getCartBody()).execute(userService, bookService, cartService);
+        }
+        if(transaction.getCommand().getType().equals("deleteFromCart")) {
+            return new DeleteFromCart(transaction.getCommand().getCart()).execute(userService, bookService, cartService);
+        }
+        if(transaction.getCommand().getType().equals("getCart")) {
+            return new GetCartOfUserCommand(transaction.getCommand().getUser()).execute(bookService, cartService);
         }
         return null;
     }

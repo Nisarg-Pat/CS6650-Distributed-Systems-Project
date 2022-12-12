@@ -29,4 +29,12 @@ public class Transaction implements Serializable {
     public Command getCommand() {
         return command;
     }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "id=" + id +
+                ", command=" + command +
+                '}';
+    }
 }

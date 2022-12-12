@@ -96,7 +96,7 @@ public class PaxosController{
             }
         }
 
-        ResponseEntity<Object> response = new ResponseEntity<>(null, HttpStatus.BAD_GATEWAY);
+        ResponseEntity<Object> response = new ResponseEntity<>(false, HttpStatus.BAD_GATEWAY);
         for (Server server : servers) {
             response = restService.post(restService.generateURL(server.getHost(), server.getPort(), "learn"), transaction);
         }
@@ -145,7 +145,7 @@ public class PaxosController{
 //        Implementing random failure of the server with a probability of 0.1
         if (Math.random() <= FAILURE_CHANCE) {
             System.out.println("Got Preparation request for " + transaction + ": Failing Server");
-            return new ResponseEntity<>(new Promise(false, null), HttpStatus.OK);
+            return new ResponseEntity<>(Long.MIN_VALUE, HttpStatus.OK);
         }
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -168,7 +168,7 @@ public class PaxosController{
         } catch (ExecutionException | InterruptedException | TimeoutException e) {
             System.out.println("Timeout to accept " + transaction + ": Failed Timeout");
         }
-        return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(Long.MIN_VALUE, HttpStatus.BAD_REQUEST);
     }
 
 

@@ -1,5 +1,8 @@
 package com.example.cs6650.server.controller;
 
+import com.example.cs6650.server.controller.command.*;
+import com.example.cs6650.server.coordinator.RestService;
+import com.example.cs6650.server.distributedalgos.twophasecommit.Transaction;
 import com.example.cs6650.server.model.Book;
 import com.example.cs6650.server.model.Cart;
 import com.example.cs6650.server.model.CartBody;
@@ -36,64 +39,38 @@ public class CartController {
     BookService bookService;
 
     @Autowired
+    RestService restService;
+
+    @Autowired
     private MyServerRepository myServer;
 
     @PostMapping("/usercart")
-    public ResponseEntity<List<Book>> getCartOfUser(@RequestBody User user) {
-        List<Cart> cartList = cartService.getCartOfUser(user);
-        List<Book> bookList = new ArrayList<>();
-        for(Cart cart: cartList) {
-            if(bookService.getBook(cart.getBookId()).isPresent()) {
-                bookList.add(bookService.getBook(cart.getBookId()).get());
-            }
-        }
-        return new ResponseEntity<>(bookList, HttpStatus.OK);
+    public ResponseEntity<Object> getCartOfUser(@RequestBody User user) {
+        Command command = new GetCartOfUserCommand(user);
+        Transaction transaction = new Transaction(Long.parseLong(System.currentTimeMillis()+""+myServer.getMyServerById(1).getPort()), command);
+        return restService.post(restService.generateURL("localhost", 8080, "propose"), transaction);
     }
 
     @PostMapping("/addtocart")
-    public ResponseEntity<Book> addToCart(@RequestBody Cart cart) {
-        System.out.println("Add:"+cart);
-        Optional<User> user = userService.getUserFromId(cart.getUserId());
-        if(user.isEmpty()) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
-        Optional<Book> book = bookService.getBook(cart.getBookId());
-        if(book.isEmpty()) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
-        cartService.addCart(cart);
-        return new ResponseEntity<>(book.get(), HttpStatus.CREATED);
+    public ResponseEntity<Object> addToCart(@RequestBody Cart cart) {
+        Command command = new AddToCartCommand(cart);
+        Transaction transaction = new Transaction(Long.parseLong(System.currentTimeMillis()+""+myServer.getMyServerById(1).getPort()), command);
+        return restService.post(restService.generateURL("localhost", 8080, "propose"), transaction);
     }
 
     @PostMapping("/remove")
-    public ResponseEntity<Integer> deleteFromCart(@RequestBody Cart cart) {
-        System.out.println("Remove"+cart);
-        Optional<Cart> ocart = cartService.getCart(cart);
-        if(ocart.isEmpty()) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
-        cartService.removeCart(ocart.get());
-        return new ResponseEntity<>(cart.getBookId(), HttpStatus.OK);
+    public ResponseEntity<Object> deleteFromCart(@RequestBody Cart cart) {
+        Command command = new DeleteFromCart(cart);
+        Transaction transaction = new Transaction(Long.parseLong(System.currentTimeMillis()+""+myServer.getMyServerById(1).getPort()), command);
+        return restService.post(restService.generateURL("localhost", 8080, "propose"), transaction);
+
     }
 
     @PostMapping("/buycart")
-    public ResponseEntity<List<Book>> buyCart(@RequestBody CartBody body) {
-        System.out.println(body);
-        Optional<User> user = userService.getUserFromId(body.getNewUser().getId());
-        if(user.isEmpty()) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
-        List<Book> bookList = new ArrayList<>();
-        for(Book cartbook: body.getBookList()) {
-            Optional<Book> book = bookService.getBook(cartbook.getId());
-            if(book.isEmpty()) {
-                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-            } else if (!book.get().getStatus().equals("sell")) {
-                return new ResponseEntity<>(null, HttpStatus.CONFLICT);
-            }
-            bookList.add(book.get());
-        }
-        List<Book> buyBooks = bookService.buyBooks(user.get(), bookList);
-        return new ResponseEntity<>(buyBooks, HttpStatus.OK);
+    public ResponseEntity<Object> buyCart(@RequestBody CartBody body) {
+        Command command = new BuyCart(body);
+        Transaction transaction = new Transaction(Long.parseLong(System.currentTimeMillis()+""+myServer.getMyServerById(1).getPort()), command);
+        return restService.post(restService.generateURL("localhost", 8080, "propose"), transaction);
+
     }
 }
