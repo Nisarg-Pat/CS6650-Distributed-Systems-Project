@@ -106,13 +106,11 @@ public class ServerApplication {
                     response.append(responseLine.trim());
                 }
                 Log.logln(response.toString());
-                String[] ss = response.toString().split("id:");
-                for(int i=0;i<ss.length;i++) {
-                    Log.logln(ss[i]);
-                }
+                String ss = response.toString().split("\"id\":")[1].split(",")[0];
+                index = Integer.parseInt(ss);
             }
 
-            myServerRepository.save(new MyServer(host, port, 0));
+            myServerRepository.save(new MyServer(host, port, index));
             paxosRepository.save(new Paxos(0, null));
             for(int i=0;i<100;i++) {
                 TimeStamp timeStamp = new TimeStamp( 0);

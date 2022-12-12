@@ -2,9 +2,6 @@ package com.example.cs6650.server.distributedalgos.vectorclock;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Table(name = "timestamp")
 public class TimeStamp {
@@ -12,10 +9,10 @@ public class TimeStamp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int value;
+    private int val;
 
-    public TimeStamp(int value) {
-        this.value = value;
+    public TimeStamp(int val) {
+        this.val = val;
     }
 
     public TimeStamp() {
@@ -29,11 +26,11 @@ public class TimeStamp {
         this.id = id;
     }
 
-    public Integer getValue() {
-        return value;
+    public Integer getVal() {
+        return val;
     }
 
-    public void setValue(Integer value) {
-        this.value = value;
+    public void setVal(Integer val) {
+        this.val = val;
     }
 }

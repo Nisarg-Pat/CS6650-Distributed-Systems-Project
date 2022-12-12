@@ -2,9 +2,9 @@ package com.example.cs6650.server.distributedalgos.vectorclock;
 
 import com.example.cs6650.server.model.MyServer;
 import com.example.cs6650.server.repository.MyServerRepository;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class TimeStampService {
 
     public List<Integer> generateTimeStamp() {
         TimeStamp timeStamp = getMyTimeStamp();
-        timeStamp.setValue(timeStamp.getValue()+1);
+        timeStamp.setVal(timeStamp.getVal()+1);
         timeStampRepository.save(timeStamp);
         return getTimeStamp();
     }
@@ -35,7 +35,7 @@ public class TimeStampService {
             ans.add(0);
         }
         for(TimeStamp timeStamp: timeStamps) {
-            ans.set(timeStamp.getId(), timeStamp.getValue());
+            ans.set(timeStamp.getId(), timeStamp.getVal());
         }
         return ans;
     }
@@ -43,8 +43,28 @@ public class TimeStampService {
     public void setTimeStamp(List<Integer> stamps) {
         for(int i=0;i<100;i++) {
             TimeStamp timeStamp = timeStampRepository.getTimeStampById(i);
-            timeStamp.setValue(Math.max(timeStamp.getValue(), stamps.get(i)));
+            timeStamp.setVal(Math.max(timeStamp.getVal(), stamps.get(i)));
             timeStampRepository.save(timeStamp);
+        }
+    }
+
+    public int compare(List<Integer> timeStamp, int port) {
+        List<Integer> myTimeStamp = getTimeStamp();
+        boolean lessThan = true;
+        boolean greaterThan = true;
+        for(int i=0;i<100;i++) {
+            if(myTimeStamp.get(i)>timeStamp.get(i)) {
+                lessThan = false;
+            } else if(myTimeStamp.get(i)<timeStamp.get(i)) {
+                greaterThan = false;
+            }
+        }
+        if(lessThan && greaterThan) {
+            return 0;
+        } else if(lessThan) {
+            return -1;
+        } else {
+            return 1;
         }
     }
 }
