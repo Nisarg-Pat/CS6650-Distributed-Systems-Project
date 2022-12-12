@@ -5,14 +5,18 @@ import com.example.cs6650.server.controller.command.Command;
 import com.example.cs6650.server.service.IService;
 import org.springframework.http.ResponseEntity;
 
-public class Transaction {
+import java.io.Serializable;
+
+public class Transaction implements Serializable {
 
     private final long id;
     private final Command command;
+    private final String serviceType;
 
-    public Transaction(long id, Command command) {
+    public Transaction(long id, Command command, String serviceType) {
         this.id = id;
         this.command = command;
+        this.serviceType = serviceType;
     }
 
     public long getId() {
@@ -23,7 +27,7 @@ public class Transaction {
         return command;
     }
 
-    public ResponseEntity<Object> execute(IService service) {
-        return command.execute(service);
+    public String getServiceType() {
+        return serviceType;
     }
 }

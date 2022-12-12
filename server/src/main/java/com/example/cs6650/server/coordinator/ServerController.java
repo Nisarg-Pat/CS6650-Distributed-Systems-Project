@@ -56,6 +56,12 @@ public class ServerController {
         return new ResponseEntity<>(servero, HttpStatus.CREATED);
     }
 
+    @PostMapping("/allservers")
+    public ResponseEntity<List<Server>> allServer() {
+        System.out.println("AllServer:"+coordinatorService.serverList());
+        return new ResponseEntity<>(coordinatorService.serverList(), HttpStatus.OK);
+    }
+
     @PostMapping("/serverdata")
     public ResponseEntity<Object> makeData(@RequestBody ServerData serverData) {
         System.out.println(serverData);

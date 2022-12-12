@@ -8,15 +8,14 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Optional;
 
-public class LogoutCommand implements Command{
-
-    User user;
+public class LogoutCommand extends Command{
 
     public LogoutCommand(User user) {
+        super();
+        this.type = "logout";
         this.user = user;
     }
 
-    @Override
     public ResponseEntity<Object> execute(IService service) {
         UserService userService = (UserService) service;
         Optional<User> getUser = userService.getUserFromUsernamePassword(user.getUsername(), user.getPassword());

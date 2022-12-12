@@ -31,6 +31,8 @@ public class ServerApplication {
     @Bean
     public CommandLineRunner run(UserRepository userRepository, BookRepository bookRepository, MyServerRepository myServerRepository) throws Exception {
         return (String[] args) -> {
+            String host="localhost";
+            int port=8080;
             if(args.length ==1 && args[0].equals("--ds-coordinator")) {
                 User user = new User("qq","qq","qq","qq");
                 userRepository.save(user);
@@ -65,41 +67,40 @@ public class ServerApplication {
                 book = new Book("c4", 3, "sell", 41);
                 bookRepository.save(book);
 
-                MyServer myServer = new MyServer("localhost", 8080);
-                System.out.println(myServer);
-                myServerRepository.save(myServer);
+                host = "localhost";
+                port = 8080;
 
             } else if(args.length == 2) {
-                String host = args[0];
+                host = args[0];
                 String portString = args[1].split("=")[1];
-                int port = Integer.parseInt(portString);
-
-                String jsonInputString = "{\"host\": \""+host+"\", \"port\": "+port+"}";
-                System.out.println(jsonInputString);
-
-                URL url = new URL ("http://localhost:8080/addserver");
-                HttpURLConnection con = (HttpURLConnection)url.openConnection();
-                con.setRequestMethod("POST");
-                con.setRequestProperty("Content-Type", "application/json");
-                con.setRequestProperty("Accept", "application/json");
-                con.setDoOutput(true);
-
-                try(OutputStream os = con.getOutputStream()) {
-                    byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
-                    os.write(input, 0, input.length);
-                }
-                try(BufferedReader br = new BufferedReader(
-                        new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
-                    StringBuilder response = new StringBuilder();
-                    String responseLine = null;
-                    while ((responseLine = br.readLine()) != null) {
-                        response.append(responseLine.trim());
-                    }
-                    System.out.println(response.toString());
-                }
-
-                myServerRepository.save(new MyServer(host, port));
+                port = Integer.parseInt(portString);
             }
+
+            String jsonInputString = "{\"host\": \""+host+"\", \"port\": "+port+"}";
+            System.out.println(jsonInputString);
+
+            URL url = new URL ("http://localhost:8080/addserver");
+            HttpURLConnection con = (HttpURLConnection)url.openConnection();
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setRequestProperty("Accept", "application/json");
+            con.setDoOutput(true);
+
+            try(OutputStream os = con.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+            try(BufferedReader br = new BufferedReader(
+                    new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
+                StringBuilder response = new StringBuilder();
+                String responseLine = null;
+                while ((responseLine = br.readLine()) != null) {
+                    response.append(responseLine.trim());
+                }
+                System.out.println(response.toString());
+            }
+
+            myServerRepository.save(new MyServer(host, port));
         };
     }
 

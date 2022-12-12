@@ -8,15 +8,14 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Optional;
 
-public class LoginCommand implements Command{
-
-    User user;
+public class LoginCommand extends Command{
 
     public LoginCommand(User user) {
+        super();
+        this.type = "login";
         this.user = user;
     }
 
-    @Override
     public ResponseEntity<Object> execute(IService service) {
         System.out.println("In Login User:"+user);
         UserService userService = (UserService) service;

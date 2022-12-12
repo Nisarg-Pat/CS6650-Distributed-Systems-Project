@@ -18,7 +18,7 @@ public class RestService {
         this.restTemplate = restTemplateBuilder.build();
     }
 
-    public Object post(String url, Object data) {
+    public ResponseEntity<Object> post(String url, Object data) {
         HttpHeaders headers = new HttpHeaders();
         // set `content-type` header
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -29,8 +29,7 @@ public class RestService {
         HttpEntity<Object> entity = new HttpEntity<>(data, headers);
 
         // send POST request
-        ResponseEntity<Object> response = restTemplate.postForEntity(url, entity, Object.class);
-        return response.getBody();
+        return restTemplate.postForEntity(url, entity, Object.class);
     }
 
     public String generateURL(String host, int port, String var) {

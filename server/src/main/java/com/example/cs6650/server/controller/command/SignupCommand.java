@@ -7,15 +7,27 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-public class SignupCommand implements Command{
-    User user;
+import java.io.Serializable;
 
+public class SignupCommand extends Command {
 
     public SignupCommand(User user) {
+        super();
+        this.type = "signup";
         this.user = user;
     }
 
-    @Override
+    public SignupCommand() {
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public ResponseEntity<Object> execute(IService service) {
         UserService userService = (UserService) service;
         System.out.println("In Create User:"+user);
