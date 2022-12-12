@@ -1,5 +1,6 @@
 package com.example.cs6650.server.controller.command;
 
+import com.example.cs6650.server.common.Log;
 import com.example.cs6650.server.model.User;
 import com.example.cs6650.server.service.IService;
 import com.example.cs6650.server.service.UserService;
@@ -30,7 +31,7 @@ public class SignupCommand extends Command {
 
     public ResponseEntity<Object> execute(IService service) {
         UserService userService = (UserService) service;
-        System.out.println("In Create User:"+user);
+        Log.logln("In Create User:"+user);
         if(userService.getUserFromUsername(user.getUsername()).isPresent()) {
             return new ResponseEntity<>("Username Already present", HttpStatus.CONFLICT);
         }

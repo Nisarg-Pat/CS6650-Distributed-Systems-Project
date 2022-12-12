@@ -1,5 +1,6 @@
 package com.example.cs6650.server.distributedalgos.ricartoagarwala;
 
+import com.example.cs6650.server.common.Log;
 import com.example.cs6650.server.coordinator.RestService;
 import com.example.cs6650.server.coordinator.Server;
 import com.example.cs6650.server.model.MyServer;
@@ -30,7 +31,7 @@ public class RicartAgarwala {
     Queue<Server> serverQueue = new LinkedList<>();
 
     public void enterSection() {
-        System.out.println("Enter Section");
+        Log.logln("Enter Section");
 
         MyServer myserver = myServerRepository.getMyServerById(1);
 
@@ -65,7 +66,7 @@ public class RicartAgarwala {
 
 
     public void exitSection() {
-        System.out.println("Exit Section");
+        Log.logln("Exit Section");
         State state = stateRepository.getStateById(1);
         state.setState(State.RELEASED);
         stateRepository.save(state);
@@ -77,7 +78,7 @@ public class RicartAgarwala {
 
     @PostMapping("/rarequest")
     public ResponseEntity<Object> rarequest(@RequestBody Server server) {
-        System.out.println("RA Request");
+        Log.logln("RA Request");
         State state = stateRepository.getStateById(1);
         if(state.getState().equals(State.HELD) || state.getState().equals(State.WANTED) && state.getTimestamp()<server.getRaTimestamp()) {
             serverQueue.add(server);
@@ -89,12 +90,12 @@ public class RicartAgarwala {
 
     @PostMapping("/raresponse")
     public ResponseEntity<Object> raresponse(@RequestBody Server server) {
-        System.out.println("RA Response");
+        Log.logln("RA Response");
         State state = stateRepository.getStateById(1);
         state.setResponseCount(state.getResponseCount()+1);
-        System.out.println(state.getServerCount() + " "+state.getResponseCount());
+        Log.logln(state.getServerCount() + " "+state.getResponseCount());
         if(state.getResponseCount() == state.getServerCount()) {
-            System.out.println("Setting state to held");
+            Log.logln("Setting state to held");
             state.setState(State.HELD);
         }
         stateRepository.save(state);

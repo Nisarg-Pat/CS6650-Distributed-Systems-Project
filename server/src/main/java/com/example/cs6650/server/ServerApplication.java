@@ -1,5 +1,6 @@
 package com.example.cs6650.server;
 
+import com.example.cs6650.server.common.Log;
 import com.example.cs6650.server.distributedalgos.paxos.Paxos;
 import com.example.cs6650.server.distributedalgos.paxos.PaxosRepository;
 import com.example.cs6650.server.distributedalgos.ricartoagarwala.State;
@@ -81,7 +82,7 @@ public class ServerApplication {
             }
 
             String jsonInputString = "{\"host\": \""+host+"\", \"port\": "+port+"}";
-            System.out.println(jsonInputString);
+            Log.logln(jsonInputString);
 
             URL url = new URL ("http://localhost:8080/addserver");
             HttpURLConnection con = (HttpURLConnection)url.openConnection();
@@ -101,7 +102,7 @@ public class ServerApplication {
                 while ((responseLine = br.readLine()) != null) {
                     response.append(responseLine.trim());
                 }
-                System.out.println(response.toString());
+                Log.logln(response.toString());
             }
 
             myServerRepository.save(new MyServer(host, port));

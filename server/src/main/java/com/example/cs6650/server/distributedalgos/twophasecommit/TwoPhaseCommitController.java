@@ -1,5 +1,6 @@
 package com.example.cs6650.server.distributedalgos.twophasecommit;
 
+import com.example.cs6650.server.common.Log;
 import com.example.cs6650.server.controller.command.Command;
 import com.example.cs6650.server.controller.command.LoginCommand;
 import com.example.cs6650.server.controller.command.LogoutCommand;
@@ -63,19 +64,19 @@ public class TwoPhaseCommitController{
                     //Getting the list of active servers.
                     List<LinkedHashMap<String, Object>> serverList = (List<LinkedHashMap<String, Object>>) restService.post(restService.generateURL("localhost", 8080, "allservers"), null).getBody();
                     List<Server> canCommitList = new ArrayList<>();
-                    System.out.println(serverList);
+                    Log.logln(serverList);
                     serverCount = serverList.size();
 
                     for(int i=0;i<serverList.size();i++) {
-                        System.out.println(serverList.get(i));
-                        System.out.println(serverList.get(i).get("host"));
-                        System.out.println(serverList.get(i).get("port"));
+                        Log.logln(serverList.get(i));
+                        Log.logln(serverList.get(i).get("host"));
+                        Log.logln(serverList.get(i).get("port"));
                     }
 
                     //Voting phase
                     for(LinkedHashMap<String, Object> serverL: serverList) {
                         Server server = new Server((String) serverL.get("host"), (Integer)serverL.get("port"));
-                        System.out.println(server);
+                        Log.logln(server);
                         boolean res = (Boolean) restService.post(restService.generateURL(server.getHost(), server.getPort(), "cancommit"), transaction).getBody();
                         if(res) {
                             canCommitList.add(server);
@@ -83,7 +84,7 @@ public class TwoPhaseCommitController{
                         canCommitResponseCount++;
                     }
 
-                    System.out.println("Voting Phase Finished");
+                    Log.logln("Voting Phase Finished");
 
                     //Completion according to outcome phase
                     if(canCommitList.size() == serverList.size()) {
@@ -120,11 +121,11 @@ public class TwoPhaseCommitController{
                     currentTransaction = null;
                     result = null;
                     transactionThread.interrupt();
-                    System.out.println("Breaking");
+                    Log.logln("Breaking");
                     break;
                 }
             }
-            System.out.println("Breeaking from Loop");
+            Log.logln("Breeaking from Loop");
             return result;
         }
     }
@@ -141,7 +142,7 @@ public class TwoPhaseCommitController{
         currentTransaction = transaction;
 
         if(currentTransaction!=null) {
-            System.out.println("canCommit "+transaction.getId()+": true");
+            Log.logln("canCommit "+transaction.getId()+": true");
             waitForTransactionResponse = new Thread(() -> {
                 try {
                     Thread.sleep(TRANSACTION_TIMEOUT);
@@ -159,7 +160,7 @@ public class TwoPhaseCommitController{
             return new ResponseEntity<>(true, HttpStatus.OK);
         } else {
             //Cannot commit the transaction. Abort immediately
-            System.out.println("canCommit "+transaction.getId()+": false");
+            Log.logln("canCommit "+transaction.getId()+": false");
             currentTransaction = null;
             result = null;
             return new ResponseEntity<>(false, HttpStatus.OK);
@@ -169,9 +170,9 @@ public class TwoPhaseCommitController{
 
     @PostMapping("/docommit")
     public ResponseEntity<Object> doCommit(@RequestBody Transaction transaction) {
-        System.out.println("doCommit: "+transaction.getId());
+        Log.logln("doCommit: "+transaction.getId());
         if(committed.contains(transaction.getId())) {
-            System.out.println("Already Committed: "+transaction.getId());
+            Log.logln("Already Committed: "+transaction.getId());
             return new ResponseEntity<>( null, HttpStatus.OK);
         }
         committed.add(transaction.getId());
@@ -190,14 +191,14 @@ public class TwoPhaseCommitController{
         }
         currentTransaction = null;
         //Send a haveCommited message to Manager.
-        System.out.println("Sending transaction to haveCommitted");
+        Log.logln("Sending transaction to haveCommitted");
         restService.post(restService.generateURL("localhost", 8080, "havecommitted"), transaction);
         return res;
     }
 
     @PostMapping("/doabort")
     public ResponseEntity<Object> doAbort(@RequestBody Transaction transaction) {
-        System.out.println("doAbort: "+transaction.getId());
+        Log.logln("doAbort: "+transaction.getId());
         result = null;
         if(waitForTransactionResponse!=null && waitForTransactionResponse.isAlive()) {
             waitForTransactionResponse.interrupt();
@@ -210,14 +211,14 @@ public class TwoPhaseCommitController{
     @PostMapping("/havecommitted")
     public ResponseEntity<Object> haveCommitted(@RequestBody Transaction transaction) {
         //Received a havec ommited message, increment the counter.
-        System.out.println("haveCommitted: "+transaction.getId());
+        Log.logln("haveCommitted: "+transaction.getId());
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
     @PostMapping("/getdecision")
     public ResponseEntity<Object> getDecision(@RequestBody Transaction transaction){
         //Server asking for a decision to commit or not to manager.
-        System.out.println("getDecision: "+transaction.getId());
+        Log.logln("getDecision: "+transaction.getId());
         while(canCommitResponseCount != serverCount) {
             continue;
         }

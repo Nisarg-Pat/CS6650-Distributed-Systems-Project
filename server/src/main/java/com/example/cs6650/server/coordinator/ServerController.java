@@ -1,5 +1,6 @@
 package com.example.cs6650.server.coordinator;
 
+import com.example.cs6650.server.common.Log;
 import com.example.cs6650.server.model.Book;
 import com.example.cs6650.server.model.User;
 import com.example.cs6650.server.repository.BookRepository;
@@ -49,8 +50,8 @@ public class ServerController {
 
     @PostMapping("/addserver")
     public ResponseEntity<Object> addServer(@RequestBody Server server) {
-        System.out.println("Server:"+server);
         Server servero = coordinatorService.addServer(server);
+        Log.logln("Added Server:"+server);
         ServerData serverData = new ServerData(userService.allUsers(), cartService.allCarts(), bookService.allBooks());
         Object response = restService.post(restService.generateURL(server.getHost(), server.getPort(), "serverdata"), serverData);
         return new ResponseEntity<>(servero, HttpStatus.CREATED);
@@ -58,16 +59,17 @@ public class ServerController {
 
     @PostMapping("/allservers")
     public ResponseEntity<List<Server>> allServer() {
-        System.out.println("AllServer:"+coordinatorService.serverList());
         return new ResponseEntity<>(coordinatorService.serverList(), HttpStatus.OK);
     }
 
     @PostMapping("/serverdata")
     public ResponseEntity<Object> makeData(@RequestBody ServerData serverData) {
-        System.out.println(serverData);
+//        Log.logln("Coordinator Data: "+serverData);
+        Log.logln("Copying state from Coordinator");
         userRepository.saveAll(serverData.getUsers());
         bookRepository.saveAll(serverData.getBooks());
         cartRepository.saveAll(serverData.getCarts());
+        Log.logln("State Copied");
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 }

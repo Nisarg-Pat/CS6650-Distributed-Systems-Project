@@ -1,5 +1,6 @@
 package com.example.cs6650.server.controller.command;
 
+import com.example.cs6650.server.common.Log;
 import com.example.cs6650.server.model.Book;
 import com.example.cs6650.server.model.Cart;
 import com.example.cs6650.server.model.User;
@@ -20,7 +21,7 @@ public class DeleteFromCart extends Command{
     }
 
     public ResponseEntity<Object> execute(UserService userService, BookService bookService, CartService cartService) {
-        System.out.println("Remove"+cart);
+        Log.logln("Remove"+cart);
         Optional<Cart> ocart = cartService.getCart(cart);
         if(ocart.isEmpty()) {
             return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);

@@ -1,5 +1,6 @@
 package com.example.cs6650.server.controller.command;
 
+import com.example.cs6650.server.common.Log;
 import com.example.cs6650.server.model.Book;
 import com.example.cs6650.server.model.Cart;
 import com.example.cs6650.server.model.CartBody;
@@ -23,7 +24,7 @@ public class BuyCart extends Command{
     }
 
     public ResponseEntity<Object> execute(UserService userService, BookService bookService, CartService cartService) {
-        System.out.println(cartBody);
+        Log.logln(cartBody);
         Optional<User> user = userService.getUserFromId(cartBody.getNewUser().getId());
         if(user.isEmpty()) {
             return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);

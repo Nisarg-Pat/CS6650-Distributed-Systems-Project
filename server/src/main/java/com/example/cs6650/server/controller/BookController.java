@@ -1,5 +1,6 @@
 package com.example.cs6650.server.controller;
 
+import com.example.cs6650.server.common.Log;
 import com.example.cs6650.server.controller.command.*;
 import com.example.cs6650.server.coordinator.RestService;
 import com.example.cs6650.server.distributedalgos.paxos.PaxosController;
@@ -38,7 +39,7 @@ public class BookController extends RicartAgarwala {
 
     @PostMapping("/addbook")
     public ResponseEntity<Object> addBook(@RequestBody Book book) {
-        System.out.println("In Add Book:"+book);
+        Log.logln("In Add Book:"+book);
         Optional<User> user = userService.getUserFromId(book.getUserId());
         if(user.isEmpty()) {
             return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
@@ -58,7 +59,7 @@ public class BookController extends RicartAgarwala {
 
     @PostMapping("/sell")
     public ResponseEntity<Object> sellBook(@RequestBody Book book) {
-        System.out.println("In Sell Book:"+book);
+        Log.logln("In Sell Book:"+book);
         Optional<User> user = userService.getUserFromId(book.getUserId());
         if(user.isEmpty()) {
             return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
@@ -70,7 +71,7 @@ public class BookController extends RicartAgarwala {
 
     @PostMapping("/shelf")
     public ResponseEntity<Object> shelfBook(@RequestBody Book book) {
-        System.out.println("In Shelf Book:"+book);
+        Log.logln("In Shelf Book:"+book);
         Optional<User> user = userService.getUserFromId(book.getUserId());
         if(user.isEmpty()) {
             return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
@@ -82,7 +83,7 @@ public class BookController extends RicartAgarwala {
 
     @PostMapping("/delete")
     public ResponseEntity<Object> deleteBook(@RequestBody Book book) {
-        System.out.println("In Delete Book:"+book);
+        Log.logln("In Delete Book:"+book);
         Optional<User> user = userService.getUserFromId(book.getUserId());
         if(user.isEmpty()) {
             return new ResponseEntity<>(Integer.MIN_VALUE, HttpStatus.BAD_REQUEST);

@@ -1,5 +1,6 @@
 package com.example.cs6650.server.controller.command;
 
+import com.example.cs6650.server.common.Log;
 import com.example.cs6650.server.model.User;
 import com.example.cs6650.server.service.IService;
 import com.example.cs6650.server.service.UserService;
@@ -17,7 +18,7 @@ public class LoginCommand extends Command{
     }
 
     public ResponseEntity<Object> execute(IService service) {
-        System.out.println("In Login User:"+user);
+        Log.logln("In Login User:"+user);
         UserService userService = (UserService) service;
         Optional<User> getUser = userService.getUserFromUsernamePassword(user.getUsername(), user.getPassword());
         if(getUser.isEmpty()) {
