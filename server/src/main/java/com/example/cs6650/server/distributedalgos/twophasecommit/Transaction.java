@@ -19,6 +19,12 @@ public class Transaction implements Serializable {
         this.serviceType = serviceType;
     }
 
+    public Transaction(Transaction other) {
+        this.id = other.getId();
+        this.command = other.getCommand();
+        this.serviceType = other.getServiceType();
+    }
+
     public long getId() {
         return id;
     }

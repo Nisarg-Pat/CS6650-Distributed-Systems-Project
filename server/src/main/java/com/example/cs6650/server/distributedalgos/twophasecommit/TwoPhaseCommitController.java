@@ -170,7 +170,7 @@ public class TwoPhaseCommitController {
         }
         committed.add(transaction.getId());
 
-        ResponseEntity<Object> res = execute(transaction);
+        ResponseEntity<Object> res = TransactionExecutor.execute(transaction, userService, bookService, cartService);
 //        if(transaction.getServiceType().equals("userService")) {
 //            result = transaction.execute(userService).getBody();
 //        }
@@ -189,19 +189,6 @@ public class TwoPhaseCommitController {
         return res;
     }
 
-    private ResponseEntity<Object> execute(Transaction transaction) {
-        if(transaction.getCommand().getType().equals("signup")) {
-            return new SignupCommand(transaction.getCommand().getUser()).execute(userService);
-        }
-        if(transaction.getCommand().getType().equals("logout")) {
-            return new LogoutCommand(transaction.getCommand().getUser()).execute(userService);
-        }
-        if(transaction.getCommand().getType().equals("login")) {
-            return new LoginCommand(transaction.getCommand().getUser()).execute(userService);
-        }
-        return null;
-    }
-
     @PostMapping("/doabort")
     public ResponseEntity<Object> doAbort(@RequestBody Transaction transaction) {
         System.out.println("doAbort: "+transaction.getId());
@@ -218,8 +205,6 @@ public class TwoPhaseCommitController {
     public ResponseEntity<Object> haveCommitted(@RequestBody Transaction transaction) {
         //Received a havec ommited message, increment the counter.
         System.out.println("haveCommitted: "+transaction.getId());
-        haveCommittedCount++;
-        System.out.println("haveCommittedCount: "+haveCommittedCount);
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
@@ -236,7 +221,6 @@ public class TwoPhaseCommitController {
     private void transactionResetManager() {
         serverCount = 0;
         canCommitResponseCount = 0;
-        haveCommittedCount = 0;
         startCommit = false;
     }
 }

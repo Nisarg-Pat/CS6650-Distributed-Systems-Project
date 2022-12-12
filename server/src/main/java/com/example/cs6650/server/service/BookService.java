@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class BookService {
+public class BookService implements IService{
 
     @Autowired
     private BookRepository bookRepository;

@@ -1,5 +1,7 @@
 package com.example.cs6650.server;
 
+import com.example.cs6650.server.distributedalgos.paxos.Paxos;
+import com.example.cs6650.server.distributedalgos.paxos.PaxosRepository;
 import com.example.cs6650.server.model.Book;
 import com.example.cs6650.server.model.MyServer;
 import com.example.cs6650.server.model.User;
@@ -29,7 +31,7 @@ public class ServerApplication {
 	}
 
     @Bean
-    public CommandLineRunner run(UserRepository userRepository, BookRepository bookRepository, MyServerRepository myServerRepository) throws Exception {
+    public CommandLineRunner run(UserRepository userRepository, BookRepository bookRepository, MyServerRepository myServerRepository, PaxosRepository paxosRepository) throws Exception {
         return (String[] args) -> {
             String host="localhost";
             int port=8080;
@@ -101,6 +103,7 @@ public class ServerApplication {
             }
 
             myServerRepository.save(new MyServer(host, port));
+            paxosRepository.save(new Paxos(0, null));
         };
     }
 

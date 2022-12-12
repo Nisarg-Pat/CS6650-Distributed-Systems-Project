@@ -6,6 +6,7 @@ import com.example.cs6650.server.controller.command.Command;
 import com.example.cs6650.server.controller.command.LoginCommand;
 import com.example.cs6650.server.controller.command.LogoutCommand;
 import com.example.cs6650.server.controller.command.SignupCommand;
+import com.example.cs6650.server.distributedalgos.paxos.PaxosController;
 import com.example.cs6650.server.distributedalgos.twophasecommit.Transaction;
 import com.example.cs6650.server.distributedalgos.twophasecommit.TwoPhaseCommitController;
 import com.example.cs6650.server.model.User;
@@ -46,7 +47,7 @@ public class UserController extends TwoPhaseCommitController {
     @PostMapping("/signup")
     public ResponseEntity<Object> createUser(@RequestBody User user) {
         Command command = new SignupCommand(user);
-        Transaction transaction = new Transaction(Long.parseLong(""+myServer.getMyServerById(1).getPort()+""+System.currentTimeMillis()), command, "userService");
+        Transaction transaction = new Transaction(Long.parseLong(System.currentTimeMillis()+""+myServer.getMyServerById(1).getPort()), command, "userService");
         return performTransaction(transaction);
     }
 
@@ -54,14 +55,14 @@ public class UserController extends TwoPhaseCommitController {
     @PostMapping("/login")
     public ResponseEntity<Object> loginUser(@RequestBody User user) {
         Command command = new LoginCommand(user);
-        Transaction transaction = new Transaction(Long.parseLong(""+myServer.getMyServerById(1).getPort()+""+System.currentTimeMillis()), command, "userService");
+        Transaction transaction = new Transaction(Long.parseLong(System.currentTimeMillis()+""+myServer.getMyServerById(1).getPort()), command, "userService");
         return performTransaction(transaction);
     }
 
     @PostMapping("/logout")
     public ResponseEntity<Object> logout(@RequestBody User user) {
         Command command = new LogoutCommand(user);
-        Transaction transaction = new Transaction(Long.parseLong(""+myServer.getMyServerById(1).getPort()+""+System.currentTimeMillis()), command, "userService");
+        Transaction transaction = new Transaction(Long.parseLong(System.currentTimeMillis()+""+myServer.getMyServerById(1).getPort()), command, "userService");
         return performTransaction(transaction);
     }
 }

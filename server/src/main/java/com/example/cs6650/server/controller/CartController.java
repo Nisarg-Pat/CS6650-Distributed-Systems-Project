@@ -4,6 +4,7 @@ import com.example.cs6650.server.model.Book;
 import com.example.cs6650.server.model.Cart;
 import com.example.cs6650.server.model.CartBody;
 import com.example.cs6650.server.model.User;
+import com.example.cs6650.server.repository.MyServerRepository;
 import com.example.cs6650.server.service.BookService;
 import com.example.cs6650.server.service.CartService;
 import com.example.cs6650.server.service.UserService;
@@ -33,6 +34,9 @@ public class CartController {
 
     @Autowired
     BookService bookService;
+
+    @Autowired
+    private MyServerRepository myServer;
 
     @PostMapping("/usercart")
     public ResponseEntity<List<Book>> getCartOfUser(@RequestBody User user) {

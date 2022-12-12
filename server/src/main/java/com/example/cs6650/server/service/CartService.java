@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CartService {
+public class CartService implements IService{
 
     @Autowired
     CartRepository cartRepository;
