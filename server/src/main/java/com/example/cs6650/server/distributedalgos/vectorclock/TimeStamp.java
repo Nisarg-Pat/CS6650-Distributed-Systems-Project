@@ -10,6 +10,7 @@ public class TimeStamp {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private int val;
+    private long time;
 
     public TimeStamp(int val) {
         this.val = val;
@@ -22,15 +23,27 @@ public class TimeStamp {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public Integer getVal() {
         return val;
     }
 
-    public void setVal(Integer val) {
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setVal(int val) {
         this.val = val;
+    }
+
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
+    }
+
+    public long getTime(int port) {
+        return Long.parseLong(System.currentTimeMillis()+""+port);
     }
 }

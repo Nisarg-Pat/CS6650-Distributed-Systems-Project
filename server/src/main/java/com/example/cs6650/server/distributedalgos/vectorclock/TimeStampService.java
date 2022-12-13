@@ -4,10 +4,12 @@ import com.example.cs6650.server.model.MyServer;
 import com.example.cs6650.server.repository.MyServerRepository;
 import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class TimeStampService {
     @Autowired
     TimeStampRepository timeStampRepository;
