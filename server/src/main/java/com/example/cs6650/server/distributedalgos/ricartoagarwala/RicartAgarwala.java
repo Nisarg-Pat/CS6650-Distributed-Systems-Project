@@ -84,7 +84,7 @@ public class RicartAgarwala {
 
     @PostMapping("/rarequest")
     public ResponseEntity<Object> rarequest(@RequestBody Server server) {
-        Log.logln("RA Request");
+        Log.logln("Got Ricart Agarwala Request Request");
         State state = stateRepository.getStateById(1);
         if(state.getState().equals(State.HELD) || state.getState().equals(State.WANTED) && state.getTimestamp()<server.getRaTimestamp()) {
             serverQueue.add(server);
@@ -96,10 +96,9 @@ public class RicartAgarwala {
 
     @PostMapping("/raresponse")
     public ResponseEntity<Object> raresponse(@RequestBody Server server) {
-        Log.logln("RA Response");
+        Log.logln("Recieved Ricart Agarwala Response");
         State state = stateRepository.getStateById(1);
         state.setResponseCount(state.getResponseCount()+1);
-        Log.logln(state.getServerCount() + " "+state.getResponseCount());
         if(state.getResponseCount() == state.getServerCount()) {
             Log.logln("Setting state to held");
             state.setState(State.HELD);

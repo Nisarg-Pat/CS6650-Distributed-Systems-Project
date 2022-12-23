@@ -67,18 +67,13 @@ public class TwoPhaseCommitController{
                     Log.logln(serverList);
                     serverCount = serverList.size();
 
-                    for(int i=0;i<serverList.size();i++) {
-                        Log.logln(serverList.get(i));
-                        Log.logln(serverList.get(i).get("host"));
-                        Log.logln(serverList.get(i).get("port"));
-                    }
-
                     //Voting phase
                     for(LinkedHashMap<String, Object> serverL: serverList) {
                         Server server = new Server((String) serverL.get("host"), (Integer)serverL.get("port"));
                         Log.logln(server);
                         boolean res = (Boolean) restService.post(restService.generateURL(server.getHost(), server.getPort(), "cancommit"), transaction).getBody();
                         if(res) {
+                            Log.logln("Recieved camCommit from "+server);
                             canCommitList.add(server);
                         }
                         canCommitResponseCount++;
@@ -88,6 +83,7 @@ public class TwoPhaseCommitController{
 
                     //Completion according to outcome phase
                     if(canCommitList.size() == serverList.size()) {
+                        Log.logln("Result DoCommit");
                         //doCommit
                         startCommit = true;
                         for(Server server: canCommitList) {
@@ -98,6 +94,7 @@ public class TwoPhaseCommitController{
                             }
                         }
                     } else {
+                        Log.logln("Result DoAbort");
                         //doAbort
                         for(Server server: canCommitList) {
                             restService.post(restService.generateURL(server.getHost(), server.getPort(), "doabort"), transaction);
@@ -121,11 +118,10 @@ public class TwoPhaseCommitController{
                     currentTransaction = null;
                     result = null;
                     transactionThread.interrupt();
-                    Log.logln("Breaking");
+                    Log.logln("timeout! while performing two phase commit!");
                     break;
                 }
             }
-            Log.logln("Breeaking from Loop");
             return result;
         }
     }
@@ -170,7 +166,7 @@ public class TwoPhaseCommitController{
 
     @PostMapping("/docommit")
     public ResponseEntity<Object> doCommit(@RequestBody Transaction transaction) {
-        Log.logln("doCommit: "+transaction.getId());
+        Log.logln("doCommit recieved for: "+transaction.getId());
         if(committed.contains(transaction.getId())) {
             Log.logln("Already Committed: "+transaction.getId());
             return new ResponseEntity<>( null, HttpStatus.OK);

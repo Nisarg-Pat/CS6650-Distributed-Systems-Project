@@ -65,7 +65,7 @@ public class PaxosController{
         }
 
         //Transaction Phase
-        Log.logln("Proposing " + transaction);
+        Log.logln("Proposing " + transaction.getId());
         for (Server server: servers) {
             LinkedHashMap<String, Object> promiseL = (LinkedHashMap<String, Object>) restService.post(restService.generateURL(server.getHost(), server.getPort(), "prepare"), transaction).getBody();
             Promise promise = new Promise(promiseL);
@@ -81,17 +81,16 @@ public class PaxosController{
         }
 
         if (promisedServers <= serverList.size() / 2) {
-            Log.logln(transaction+ " failed to reach a consensus!");
+            Log.logln(transaction.getId()+ " failed to reach a consensus!");
             return new ResponseEntity<>(null, HttpStatus.BAD_GATEWAY);
         } else {
-            Log.logln(transaction+ " reached a consensus!");
+            Log.logln(transaction.getId()+ " reached a consensus!");
         }
 
         int numAccepted = 0;
 
         for (Server server : servers) {
             Long value = (Long) restService.post(restService.generateURL(server.getHost(), server.getPort(), "accept"), transaction).getBody();
-            Log.logln(value);
             if (value != null && value == transaction.getId()) {
                 numAccepted++;
             }
@@ -106,11 +105,10 @@ public class PaxosController{
 
     @PostMapping("/prepare")
     public ResponseEntity<Object> prepare(@RequestBody Transaction transaction) {
-        Log.logln("In Prepare");
 
 //        Implementing random failure of the server with a probability of 0.1
         if (Math.random() <= FAILURE_CHANCE) {
-            Log.logln("Got Preparation request for " + transaction + ": Failing Server");
+            Log.logln("Got Preparation request for " + transaction.getId() + ": Failing Server");
             return new ResponseEntity<>(new Promise(false, null), HttpStatus.OK);
         }
 
@@ -122,10 +120,10 @@ public class PaxosController{
                 if (transaction.getId() > paxos.getMinTransaction()) {
                     paxos.setMinTransaction(transaction.getId());
                     paxosRepository.save(paxos);
-                    Log.logln("Got Preparation request for " + transaction + ": Promised");
+                    Log.logln("Got Preparation request for " + transaction.getId() + ": Promised");
                     return new ResponseEntity<>(new Promise(true, paxos.getTransaction()), HttpStatus.OK);
                 } else {
-                    Log.logln("Got Preparation request for " + transaction + ": Denied");
+                    Log.logln("Got Preparation request for " + transaction.getId() + ": Denied");
                     return new ResponseEntity<>(new Promise(false, null), HttpStatus.OK);
                 }
             }
@@ -135,7 +133,7 @@ public class PaxosController{
             executorService.submit(futureTask);
             return futureTask.get(EXECUTOR_TIMEOUT, TimeUnit.MILLISECONDS);
         } catch (ExecutionException | InterruptedException | TimeoutException e) {
-            Log.logln("Timeout to prepare " + transaction + ": Failed Timeout");
+            Log.logln("Timeout to prepare " + transaction.getId() + ": Failed Timeout");
         }
         return null;
     }
@@ -145,7 +143,7 @@ public class PaxosController{
 
 //        Implementing random failure of the server with a probability of 0.1
         if (Math.random() <= FAILURE_CHANCE) {
-            Log.logln("Got Preparation request for " + transaction + ": Failing Server");
+            Log.logln("Got Preparation request for " + transaction.getId() + ": Failing Server");
             return new ResponseEntity<>(Long.MIN_VALUE, HttpStatus.OK);
         }
 
@@ -156,9 +154,9 @@ public class PaxosController{
                 paxos.setMinTransaction(transaction.getId());
                 paxos.setTransaction(new Transaction(transaction));
                 paxosRepository.save(paxos);
-                Log.logln("Got Accept request for " + transaction + ": Accepted");
+                Log.logln("Got Accept request for " + transaction.getId() + ": Accepted");
             } else {
-                Log.logln("Got Accept request for " + transaction + ": Rejected");
+                Log.logln("Got Accept request for " + transaction.getId() + ": Rejected");
             }
             return new ResponseEntity<>(paxos.getMinTransaction(), HttpStatus.OK);
         });
@@ -167,7 +165,7 @@ public class PaxosController{
             executorService.submit(futureTask);
             return futureTask.get(EXECUTOR_TIMEOUT, TimeUnit.MILLISECONDS);
         } catch (ExecutionException | InterruptedException | TimeoutException e) {
-            Log.logln("Timeout to accept " + transaction + ": Failed Timeout");
+            Log.logln("Timeout to accept " + transaction.getId() + ": Failed Timeout");
         }
         return new ResponseEntity<>(Long.MIN_VALUE, HttpStatus.BAD_REQUEST);
     }
@@ -176,7 +174,7 @@ public class PaxosController{
     // Implementation of paxos learning
     @PostMapping("/learn")
     public ResponseEntity<Object> learn(@RequestBody Transaction transaction){
-        Log.logln("Got Learn request for " + transaction + ": Learned");
+        Log.logln("Got Learn request for " + transaction.getId() + ": Learned");
         resetPaxos();
         return TransactionExecutor.execute(transaction, userService, bookService, cartService);
     }

@@ -42,37 +42,37 @@ public class ServerApplication {
             int port=8080;
             int index = -1;
             if(args.length ==1 && args[0].equals("--ds-coordinator")) {
-                User user = new User("qq","qq","qq","qq");
+                User user = new User("user1","user1","user1","user1");
                 userRepository.save(user);
-                Book book = new Book("a1", 1, "shelf", 0);
+                Book book = new Book("Introduction to Algorithms", 1, "shelf", 0);
                 bookRepository.save(book);
-                book = new Book("a2", 1, "sell", 10.0);
+                book = new Book("Distributed Systems Concepts and Design", 1, "sell", 10.0);
                 bookRepository.save(book);
-                book = new Book("a3", 1, "sell", 15.0);
+                book = new Book("Operating Systems in Three Easy Pieces", 1, "sell", 15.0);
                 bookRepository.save(book);
-                book = new Book("a4", 1, "sell", 20.0);
+                book = new Book("Harry Potter", 1, "sell", 20.0);
                 bookRepository.save(book);
 
                 User user2 = new User("user2","user2","user2","user2");
                 userRepository.save(user2);
-                book = new Book("b1", 2, "shelf", 0);
+                book = new Book("Introduction to Algorithms", 2, "shelf", 0);
                 bookRepository.save(book);
-                book = new Book("b2", 2, "shelf", 0);
+                book = new Book("Introduction to Computer Science", 2, "shelf", 0);
                 bookRepository.save(book);
-                book = new Book("b3", 2, "sell", 3);
+                book = new Book("Research Methods in Education", 2, "sell", 3);
                 bookRepository.save(book);
-                book = new Book("b4", 2, "sell", 22);
+                book = new Book("Gateway to India", 2, "sell", 22);
                 bookRepository.save(book);
 
                 User user3 = new User("user3","user2","user2","user2");
                 userRepository.save(user3);
-                book = new Book("c1", 3, "shelf", 0);
+                book = new Book("Paxos Algorithm", 3, "shelf", 0);
                 bookRepository.save(book);
-                book = new Book("c2", 3, "sell", 21);
+                book = new Book("World War 3", 3, "sell", 21);
                 bookRepository.save(book);
-                book = new Book("c3", 3, "sell", 31);
+                book = new Book("Introduction to Algorithms", 3, "sell", 31);
                 bookRepository.save(book);
-                book = new Book("c4", 3, "sell", 41);
+                book = new Book("History of Data", 3, "sell", 41);
                 bookRepository.save(book);
 
                 host = "localhost";
